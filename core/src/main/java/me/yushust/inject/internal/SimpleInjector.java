@@ -8,6 +8,7 @@ import me.yushust.inject.exception.NoInjectableConstructorException;
 import me.yushust.inject.exception.UnsupportedInjectionException;
 import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.link.Module;
 import me.yushust.inject.resolvable.AnnotationTypeHandler;
 import me.yushust.inject.resolvable.InjectableConstructorResolver;
 import me.yushust.inject.resolvable.ParameterKeysResolver;
@@ -31,6 +32,13 @@ public class SimpleInjector implements Injector {
         this.injectableConstructorResolver = injectableConstructorResolver;
         this.keyResolver = keyResolver;
         this.membersInjectorFactory = new CachedMembersInjectorFactory(this, keyResolver, annotationTypeHandler, cacheBuilder);
+    }
+
+    private SimpleInjector(InternalLinker linker, SimpleInjector prototype) {
+        this.linker = linker;
+        this.injectableConstructorResolver = prototype.injectableConstructorResolver;
+        this.keyResolver = prototype.keyResolver;
+        this.membersInjectorFactory = prototype.membersInjectorFactory;
     }
 
     @Override
@@ -112,6 +120,15 @@ public class SimpleInjector implements Injector {
             throw new RuntimeException(e);
         }
 
+    }
+
+    @Override
+    public Injector createChildInjector(Iterable<Module> modules) {
+        SimpleIsolatedLinker isolatedLinker = SimpleIsolatedLinker.create(linker);
+        for (Module module : modules) {
+            module.configure(isolatedLinker);
+        }
+        return new SimpleInjector(isolatedLinker.getInternalLinker(), this);
     }
 
 }

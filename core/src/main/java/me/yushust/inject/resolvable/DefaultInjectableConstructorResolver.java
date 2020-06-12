@@ -45,9 +45,7 @@ public class DefaultInjectableConstructorResolver implements InjectableConstruct
                 try {
                     injectableConstructor = rawType.getDeclaredConstructor();
                 } catch (NoSuchMethodException e) {
-                    throw new NoInjectableConstructorException(
-                            "There're no usable constructors for class " + rawType.getName()
-                    );
+                    throw new NoInjectableConstructorException("There're no usable constructors for class " + rawType.getName(), e);
                 }
             }
 

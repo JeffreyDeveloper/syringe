@@ -12,7 +12,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LinkerImpl implements Linker {
 
-    private final InternalLinker linker = new InternalLinkerImpl();
+    protected final InternalLinker linker;
+
+    public LinkerImpl() {
+        this.linker = new InternalLinkerImpl();
+    }
+
+    protected LinkerImpl(InternalLinker linker) {
+        this.linker = linker;
+    }
 
     @Override
     public <T> LinkBuilder.Qualified<T> link(Class<T> type) {
@@ -33,9 +41,9 @@ public class LinkerImpl implements Linker {
         return linker;
     }
 
-    private static class InternalLinkerImpl implements InternalLinker {
+    protected static class InternalLinkerImpl implements InternalLinker {
 
-        private final Map<Key<?>, Link<?>> links = new ConcurrentHashMap<>();
+        protected final Map<Key<?>, Link<?>> links = new ConcurrentHashMap<>();
 
         @Override
         public <T> void removeLink(Token<T> token) {

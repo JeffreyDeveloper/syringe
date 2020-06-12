@@ -1,6 +1,9 @@
 package me.yushust.inject;
 
 import me.yushust.inject.identity.Key;
+import me.yushust.inject.link.Module;
+
+import java.util.Arrays;
 
 public interface Injector {
 
@@ -9,5 +12,11 @@ public interface Injector {
     <T> T getInstance(Class<T> type);
 
     <T> T getInstance(Key<T> key);
+
+    default Injector createChildInjector(Module... modules) {
+        return createChildInjector(Arrays.asList(modules));
+    };
+
+    Injector createChildInjector(Iterable<Module> modules);
 
 }

@@ -13,7 +13,7 @@ public abstract class AbstractModule implements Module {
             throw new NullPointerException();
         }
 
-        if (this.linker == null) {
+        if (this.linker != null) {
             throw new IllegalStateException();
         }
 
@@ -21,7 +21,7 @@ public abstract class AbstractModule implements Module {
         this.configure();
     }
 
-    public Linker getLinker() {
+    public final Linker getLinker() {
         if (linker == null) {
             throw new IllegalStateException("Linker isn't defined yet!");
         }
@@ -32,15 +32,15 @@ public abstract class AbstractModule implements Module {
 
     }
 
-    public void install(Module module) {
+    public final void install(Module module) {
         getLinker().install(module);
     }
 
-    public <T> LinkBuilder.Linkable<T> link(Key<T> key) {
+    public final <T> LinkBuilder.Linkable<T> link(Key<T> key) {
         return getLinker().link(key);
     }
 
-    public <T> LinkBuilder.Qualified<T> link(Class<T> key) {
+    public final <T> LinkBuilder.Qualified<T> link(Class<T> key) {
         return getLinker().link(key);
     }
 
