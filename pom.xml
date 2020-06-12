@@ -24,6 +24,7 @@
 	
     <modules>
         <module>core</module>
+        <module>cache-adapt</module>
     </modules>
 
     <dependencies>
@@ -34,5 +35,10 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <properties>
+        <core.version>0.1.0</core.version>
+        <cache.caffeine.version>0.1.0</cache.caffeine.version>
+    </properties>
 
 </project>
