@@ -1,5 +1,7 @@
 package me.yushust.inject.identity.token;
 
+import me.yushust.inject.internal.Preconditions;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
@@ -25,6 +27,7 @@ public class Token<T> {
 
     @SuppressWarnings("unchecked")
     public Token(Type type) {
+        Preconditions.checkNotNull(type);
         this.type = Types.wrap(type);
         this.rawType = (Class<? super T>) Types.getRawType(this.type);
     }
@@ -61,6 +64,7 @@ public class Token<T> {
     }
 
     public static Token<?> of(Type rawType, Type... typeArguments) {
+        Preconditions.checkNotNull(rawType);
         return new Token<>(new ParameterizedToken(null, rawType, typeArguments));
     }
 

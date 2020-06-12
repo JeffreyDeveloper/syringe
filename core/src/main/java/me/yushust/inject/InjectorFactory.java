@@ -1,8 +1,9 @@
 package me.yushust.inject;
 
+import me.yushust.inject.internal.InternalLinker;
 import me.yushust.inject.link.Module;
 import me.yushust.inject.cache.CacheAdapterBuilder;
-import me.yushust.inject.internal.LinkerImpl;
+import me.yushust.inject.internal.BasicInternalLinker;
 import me.yushust.inject.internal.SimpleInjector;
 import me.yushust.inject.resolvable.*;
 
@@ -28,7 +29,7 @@ public final class InjectorFactory {
 
     public static Injector create(InjectorOptions options, Iterable<Module> modules) {
 
-        LinkerImpl linker = new LinkerImpl();
+        InternalLinker linker = new BasicInternalLinker();
 
         for (Module module : modules) {
             module.configure(linker);
@@ -36,10 +37,10 @@ public final class InjectorFactory {
 
         CacheAdapterBuilder cacheAdapterBuilder = options.getCacheAdapterBuilder();
         AnnotationTypeHandler annotationTypeHandler = new CachedAnnotationTypeHandler(cacheAdapterBuilder);
-        InjectableConstructorResolver constructorResolver = new DefaultInjectableConstructorResolver(cacheAdapterBuilder);
+        InjectableConstructorResolver constructorResolver = new CachedInjectableConstructorResolver(cacheAdapterBuilder);
         ParameterKeysResolver keysResolver = new MemberParameterKeysResolver(annotationTypeHandler);
 
-        return new SimpleInjector(linker.getInternalLinker(), constructorResolver,
+        return new SimpleInjector(linker, constructorResolver,
                 keysResolver, cacheAdapterBuilder, annotationTypeHandler);
 
     }

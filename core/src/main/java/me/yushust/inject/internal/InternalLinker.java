@@ -3,8 +3,9 @@ package me.yushust.inject.internal;
 import me.yushust.inject.link.Link;
 import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.link.Linker;
 
-public interface InternalLinker {
+public interface InternalLinker extends Linker {
 
     <T> void removeLink(Token<T> token);
 

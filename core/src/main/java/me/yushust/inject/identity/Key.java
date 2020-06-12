@@ -2,6 +2,7 @@ package me.yushust.inject.identity;
 
 import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.identity.token.Types;
+import static me.yushust.inject.internal.Preconditions.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
@@ -34,8 +35,8 @@ public class Key<T> {
         this(null, null);
     }
 
-    public Key(Token<T> token, Class<? extends Annotation> qualifierType, Annotation qualifier) {
-        this.type = token;
+    private Key(Token<T> token, Class<? extends Annotation> qualifierType, Annotation qualifier) {
+        this.type = checkNotNull(token);
         this.qualifierType = qualifierType;
         this.qualifier = qualifier;
     }
@@ -69,20 +70,28 @@ public class Key<T> {
         return Types.asString(type.getType());
     }
 
-    public static <T> Key<T> of(Token<T> type, Annotation annotation) {
-        return new Key<>(type, annotation.annotationType(), annotation);
-    }
-
     public static <T> Key<T> of(Class<T> type) {
-        return new Key<>(new Token<>(type), null, null);
+        return of(type, null, null);
     }
 
     public static <T> Key<T> of(Class<T> type, Annotation annotation) {
-        return new Key<>(new Token<>(type), annotation.annotationType(), annotation);
+        return of(type, annotation.annotationType(), annotation);
+    }
+
+    public static <T> Key<T> of(Class<T> type, Class<? extends Annotation> qualifierType, Annotation qualifier) {
+        return of(new Token<>(type), qualifierType, qualifier);
     }
 
     public static <T> Key<T> of(Token<T> type) {
-        return new Key<>(type, null, null);
+        return of(type, null, null);
+    }
+
+    public static <T> Key<T> of(Token<T> type, Annotation annotation) {
+        return of(type, annotation.annotationType(), annotation);
+    }
+
+    public static <T> Key<T> of(Token<T> type, Class<? extends Annotation> qualifierType, Annotation qualifier) {
+        return new Key<>(type, qualifierType, qualifier);
     }
 
 }

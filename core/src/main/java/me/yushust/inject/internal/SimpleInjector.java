@@ -2,9 +2,9 @@ package me.yushust.inject.internal;
 
 import me.yushust.inject.Injector;
 import me.yushust.inject.Provider;
+import me.yushust.inject.internal.injector.ConstructorInjector;
 import me.yushust.inject.link.Link;
 import me.yushust.inject.cache.CacheAdapterBuilder;
-import me.yushust.inject.exception.NoInjectableConstructorException;
 import me.yushust.inject.exception.UnsupportedInjectionException;
 import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.Token;
@@ -13,9 +13,6 @@ import me.yushust.inject.resolvable.AnnotationTypeHandler;
 import me.yushust.inject.resolvable.InjectableConstructorResolver;
 import me.yushust.inject.resolvable.ParameterKeysResolver;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.Objects;
 
 public class SimpleInjector implements Injector {
@@ -31,7 +28,9 @@ public class SimpleInjector implements Injector {
         this.linker = linker;
         this.injectableConstructorResolver = injectableConstructorResolver;
         this.keyResolver = keyResolver;
-        this.membersInjectorFactory = new CachedMembersInjectorFactory(this, keyResolver, annotationTypeHandler, cacheBuilder);
+        this.membersInjectorFactory = new CachedMembersInjectorFactory(
+                this, keyResolver, injectableConstructorResolver, annotationTypeHandler, cacheBuilder
+        );
     }
 
     private SimpleInjector(InternalLinker linker, SimpleInjector prototype) {
@@ -86,49 +85,22 @@ public class SimpleInjector implements Injector {
             return link.getProvider().get();
         }
 
-        try {
-
-            Constructor<T> constructor = injectableConstructorResolver.findInjectableConstructor(key.getType());
-            List<Key<?>> injections = keyResolver.resolveParameterKeys(constructor);
-            Object[] parameters = new Object[injections.size()];
-
-
-            for (int i = 0; i < injections.size(); i++) {
-                Key<?> injection = injections.get(i);
-                Link<?> parameterLink = linker.findLink(injection);
-
-                if (parameterLink == null) {
-                    Object instance = getInstance(injection);
-
-                    if (instance == null) {
-                        throw new IllegalStateException("No instances for " + injection.toString());
-                    }
-
-                    parameters[i] = instance;
-                    continue;
-                }
-
-                parameters[i] = parameterLink.getProvider().get();
-            }
-
-            T instance = constructor.newInstance(parameters);
-            injectMembers(instance);
-            return instance;
-
-        } catch (NoInjectableConstructorException | UnsupportedInjectionException |
-                IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
+        ConstructorInjector<T> constructorInjector = membersInjectorFactory.getConstructorInjector(key.getType());
+        T instance = constructorInjector.createInstance();
+        injectMembers(instance);
+        return instance;
 
     }
 
     @Override
     public Injector createChildInjector(Iterable<Module> modules) {
-        SimpleIsolatedLinker isolatedLinker = SimpleIsolatedLinker.create(linker);
+
+        InternalLinker isolatedLinker = new IsolatedInternalLinker(linker);
         for (Module module : modules) {
             module.configure(isolatedLinker);
         }
-        return new SimpleInjector(isolatedLinker.getInternalLinker(), this);
+        return new SimpleInjector(isolatedLinker, this);
+
     }
 
 }

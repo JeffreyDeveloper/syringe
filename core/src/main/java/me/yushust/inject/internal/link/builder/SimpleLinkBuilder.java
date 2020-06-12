@@ -38,7 +38,7 @@ public class SimpleLinkBuilder<T> implements LinkBuilder.Qualified<T> {
     @Override
     public Linkable<T> qualified(Class<? extends Annotation> qualifierType) {
         checkAnnotationState();
-        key = new Key<>(type, qualifierType, null);
+        key = Key.of(type, qualifierType, null);
         type = null;
         return this;
     }
@@ -46,7 +46,7 @@ public class SimpleLinkBuilder<T> implements LinkBuilder.Qualified<T> {
     @Override
     public Linkable<T> qualified(Annotation qualifier) {
         checkAnnotationState();
-        key = new Key<>(type, qualifier.annotationType(), qualifier);
+        key = Key.of(type, qualifier);
         type = null;
         return this;
     }
@@ -100,7 +100,7 @@ public class SimpleLinkBuilder<T> implements LinkBuilder.Qualified<T> {
 
     private void checkTargetingState() {
         if (type != null) {
-            key = new Key<>(type, null, null);
+            key = Key.of(type);
         }
         if (key == null) {
             throw new InvalidLinkingException("There's no a key!");
