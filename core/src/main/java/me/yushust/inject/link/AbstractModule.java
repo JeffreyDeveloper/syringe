@@ -1,6 +1,7 @@
 package me.yushust.inject.link;
 
 import me.yushust.inject.identity.Key;
+import static me.yushust.inject.internal.Preconditions.*;
 
 public abstract class AbstractModule implements Module {
 
@@ -9,28 +10,21 @@ public abstract class AbstractModule implements Module {
     @Override
     public final void configure(Linker linker) {
 
-        if (linker == null) {
-            throw new NullPointerException();
-        }
-
-        if (this.linker != null) {
-            throw new IllegalStateException();
-        }
+        checkNotNull(linker);
+        checkState(this.linker == null, "Cannot configure linker while other linker is being configured");
 
         this.linker = linker;
         this.configure();
+        this.linker = null;
+
     }
 
     public final Linker getLinker() {
-        if (linker == null) {
-            throw new IllegalStateException("Linker isn't defined yet!");
-        }
+        checkState(this.linker != null, "Linker is not defined yet!");
         return linker;
     }
 
-    protected void configure() {
-
-    }
+    protected abstract void configure();
 
     public final void install(Module module) {
         getLinker().install(module);
