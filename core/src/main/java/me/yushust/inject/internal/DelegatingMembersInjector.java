@@ -2,7 +2,7 @@ package me.yushust.inject.internal;
 
 import me.yushust.inject.exception.UnsupportedInjectionException;
 
-import java.util.Objects;
+import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
 public class DelegatingMembersInjector implements MembersInjector {
 
@@ -10,8 +10,8 @@ public class DelegatingMembersInjector implements MembersInjector {
     private final MembersInjector methodsInjector;
 
     public DelegatingMembersInjector(MembersInjector fieldsInjector, MembersInjector methodsInjector) {
-        this.fieldsInjector = Objects.requireNonNull(fieldsInjector);
-        this.methodsInjector = Objects.requireNonNull(methodsInjector);
+        this.fieldsInjector = checkNotNull(fieldsInjector);
+        this.methodsInjector = checkNotNull(methodsInjector);
     }
 
     @Override

@@ -1,51 +1,56 @@
 package me.yushust.inject.internal.injector;
 
-import me.yushust.inject.Inject;
 import me.yushust.inject.Injector;
 import me.yushust.inject.exception.UnsupportedInjectionException;
-import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.internal.MembersInjector;
-import me.yushust.inject.resolvable.ParameterKeysResolver;
+import me.yushust.inject.resolve.InjectableMember;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Set;
+
+import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
 public class MethodsInjector implements MembersInjector {
 
-    private final ParameterKeysResolver keysResolver;
     private final Injector injector;
-
     private final Token<?> declaringClass;
-    private final List<InjectableMethod> injections;
+    private final Set<InjectableMember> injections;
 
-    public MethodsInjector(ParameterKeysResolver keysResolver, Injector injector, Token<?> declaringClass) {
-        this.keysResolver = Objects.requireNonNull(keysResolver);
-        this.injector = Objects.requireNonNull(injector);
-        this.declaringClass = Objects.requireNonNull(declaringClass);
-        this.injections = this.getInjections();
+    public MethodsInjector(Injector injector, Token<?> declaringClass, Set<InjectableMember> injections) {
+        this.injector = checkNotNull(injector);
+        this.declaringClass = checkNotNull(declaringClass);
+        this.injections = checkNotNull(injections);
     }
 
     @Override
     public void injectMembers(Object instance) throws UnsupportedInjectionException {
 
-        for (InjectableMethod injection : injections) {
+        for (InjectableMember injection : injections) {
 
-            Method method = injection.method;
-            List<Key<?>> keys = injection.parameterKeys;
-            Object[] parameters = new Object[keys.size()];
+            List<InjectableMember.KeyEntry<?>> parameterKeys = injection.getKeys();
+            Member member = injection.getMember();
 
-            for (int i = 0; i < keys.size(); i++) {
-                Key<?> key = keys.get(i);
-                Object injectedValue = injector.getInstance(key);
+            if (!(member instanceof Method)) {
+                continue;
+            }
 
-                if (injectedValue == null) {
+            Method method = (Method) member;
+
+            Object[] parameters = new Object[parameterKeys.size()];
+
+            for (int i = 0; i < parameterKeys.size(); i++) {
+
+                InjectableMember.KeyEntry<?> parameterKey = parameterKeys.get(i);
+                Object injectedValue = injector.getInstance(parameterKey.getKey());
+
+                if (injectedValue == null && !parameterKey.isOptional()) {
                     throw new UnsupportedInjectionException(
-                            "Cannot create an instance for key " + key.toString() + " for method " + method.getName() +
-                                    " of class " + declaringClass.toString()
+                        "Cannot create an instance for key " + parameterKey.toString() + " for method " + method.getName() +
+                                " of class " + declaringClass.toString()
                     );
                 }
 
@@ -56,46 +61,10 @@ public class MethodsInjector implements MembersInjector {
                 method.invoke(instance, parameters);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new UnsupportedInjectionException(
-                        "Cannot invoke method " + method.getName() + " of class " + declaringClass.toString()
+                        "Cannot invoke method " + method.getName() + " of class " + declaringClass.toString(), e
                 );
             }
 
-        }
-
-    }
-
-    private List<InjectableMethod> getInjections() {
-
-        List<InjectableMethod> injections = new ArrayList<>();
-
-        for (Method method : declaringClass.getRawType().getDeclaredMethods()) {
-
-            Inject spec = method.getAnnotation(Inject.class);
-
-            if (spec == null) {
-                continue;
-            }
-
-            if (spec.optional()) {
-                throw new IllegalStateException("optional cannot be true for methods! (Method " + method.getName() + ")");
-            }
-
-            injections.add(new InjectableMethod(keysResolver.resolveParameterKeys(method), method));
-
-        }
-
-        return injections;
-
-    }
-
-    public static class InjectableMethod {
-
-        private final List<Key<?>> parameterKeys;
-        private final Method method;
-
-        public InjectableMethod(List<Key<?>> parameterKeys, Method method) {
-            this.parameterKeys = parameterKeys;
-            this.method = method;
         }
 
     }

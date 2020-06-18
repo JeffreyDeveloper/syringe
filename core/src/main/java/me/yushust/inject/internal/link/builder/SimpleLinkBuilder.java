@@ -8,7 +8,6 @@ import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.internal.*;
 import me.yushust.inject.internal.link.SimpleLink;
-import me.yushust.inject.internal.link.provider.ClassLinkProvider;
 import me.yushust.inject.internal.link.provider.InstanceLinkProvider;
 import me.yushust.inject.internal.link.provider.KeyLinkProvider;
 import me.yushust.inject.name.Names;
@@ -59,7 +58,9 @@ public class SimpleLinkBuilder<T> implements LinkBuilder.Qualified<T> {
     @Override
     public LinkBuilder<T> to(Class<? extends T> target) {
         checkTargetingState();
-        linker.setLink(new SimpleLink<>(key, new ClassLinkProvider<>((Class<T>) target)));
+        linker.setLink(new SimpleLink<>(key, new KeyLinkProvider<>(
+                new Token<>(target)
+        )));
         return this;
     }
 

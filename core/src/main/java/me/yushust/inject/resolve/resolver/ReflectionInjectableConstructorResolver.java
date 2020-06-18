@@ -1,18 +1,15 @@
-package me.yushust.inject.resolvable;
+package me.yushust.inject.resolve.resolver;
 
 import me.yushust.inject.Inject;
-import me.yushust.inject.exception.NoInjectableConstructorException;
-import me.yushust.inject.exception.UnsupportedInjectionException;
 import me.yushust.inject.identity.token.Token;
 
 import java.lang.reflect.Constructor;
 
-public class DefaultInjectableConstructorResolver implements InjectableConstructorResolver {
+public class ReflectionInjectableConstructorResolver implements InjectableConstructorResolver {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> Constructor<T> findInjectableConstructor(Token<T> type) throws UnsupportedInjectionException,
-            NoInjectableConstructorException {
+    public <T> Constructor<T> findInjectableConstructor(Token<T> type) { // null is a valid return value
 
         Class<?> rawType = type.getRawType();
 
@@ -21,15 +18,18 @@ public class DefaultInjectableConstructorResolver implements InjectableConstruct
         for (Constructor<?> constructor : rawType.getDeclaredConstructors()) {
 
             Inject spec = constructor.getAnnotation(Inject.class);
+            boolean optional = false;
 
             if (spec == null) {
-                continue;
+                if (constructor.getAnnotation(javax.inject.Inject.class) == null) {
+                    continue;
+                }
+            } else {
+                optional = spec.optional();
             }
 
-            if (spec.optional()) {
-                throw new UnsupportedInjectionException(
-                        "Injection for constructors couldn't be optional! Class: " + rawType.getName()
-                );
+            if (optional) { // ignore invalid constructors (constructors with @Inject(optional=true))
+                continue;
             }
 
             injectableConstructor = constructor;
@@ -37,11 +37,10 @@ public class DefaultInjectableConstructorResolver implements InjectableConstruct
         }
 
         if (injectableConstructor == null) {
-
             try {
                 injectableConstructor = rawType.getDeclaredConstructor();
             } catch (NoSuchMethodException e) {
-                throw new NoInjectableConstructorException("There're no usable constructors for class " + rawType.getName(), e);
+                return null;
             }
         }
 

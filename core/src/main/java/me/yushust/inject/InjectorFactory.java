@@ -1,11 +1,12 @@
 package me.yushust.inject;
 
+import me.yushust.inject.process.ProcessorInterceptor;
 import me.yushust.inject.internal.InternalLinker;
 import me.yushust.inject.link.Module;
-import me.yushust.inject.cache.CacheAdapterBuilder;
 import me.yushust.inject.internal.BasicInternalLinker;
 import me.yushust.inject.internal.SimpleInjector;
-import me.yushust.inject.resolvable.*;
+import me.yushust.inject.resolve.AnnotationTypeHandler;
+import me.yushust.inject.resolve.resolver.*;
 
 import java.util.Arrays;
 
@@ -35,14 +36,17 @@ public final class InjectorFactory {
             module.configure(linker);
         }
 
-        CacheAdapterBuilder cacheAdapterBuilder = options.getCacheAdapterBuilder();
-        AnnotationTypeHandler annotationTypeHandler = new CachedAnnotationTypeHandler(cacheAdapterBuilder);
-        InjectableConstructorResolver constructorResolver = new CachedInjectableConstructorResolver(cacheAdapterBuilder);
-        ParameterKeysResolver keysResolver = new MemberParameterKeysResolver(annotationTypeHandler);
+        ProcessorInterceptor interceptor = options.getProcessorInterceptor();
 
-        return new SimpleInjector(linker, constructorResolver,
-                keysResolver, cacheAdapterBuilder, annotationTypeHandler);
+        AnnotationTypeHandler annotationTypeHandler = new AnnotationTypeHandler();
+        InjectableConstructorResolver constructorResolver = interceptor
+                .interceptConstructorResolver(new ReflectionInjectableConstructorResolver());
+        MemberKeyResolver memberKeyResolver = new ReflectionMemberKeyResolver(annotationTypeHandler);
+        InjectableMembersResolver injectableMembersResolver = interceptor.interceptMembersResolver(
+                        new ReflectionInjectableMembersResolver(options.getOptionalInjectionChecker(), memberKeyResolver)
+        );
 
+        return new SimpleInjector(linker, constructorResolver, injectableMembersResolver, interceptor);
     }
 
 }

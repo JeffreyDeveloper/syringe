@@ -3,40 +3,38 @@ package me.yushust.inject.internal;
 import me.yushust.inject.Injector;
 import me.yushust.inject.Provider;
 import me.yushust.inject.internal.injector.ConstructorInjector;
+import me.yushust.inject.process.ProcessorInterceptor;
 import me.yushust.inject.link.Link;
-import me.yushust.inject.cache.CacheAdapterBuilder;
 import me.yushust.inject.exception.UnsupportedInjectionException;
 import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.link.Module;
-import me.yushust.inject.resolvable.AnnotationTypeHandler;
-import me.yushust.inject.resolvable.InjectableConstructorResolver;
-import me.yushust.inject.resolvable.ParameterKeysResolver;
+import me.yushust.inject.resolve.resolver.InjectableConstructorResolver;
+import me.yushust.inject.resolve.resolver.InjectableMembersResolver;
+import me.yushust.inject.util.Providers;
 
 import java.util.Objects;
+
+import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
 public class SimpleInjector implements Injector {
 
     private final InternalLinker linker;
     private final InjectableConstructorResolver injectableConstructorResolver;
-    private final ParameterKeysResolver keyResolver;
     private final MembersInjectorFactory membersInjectorFactory;
 
     public SimpleInjector(InternalLinker linker, InjectableConstructorResolver injectableConstructorResolver,
-                          ParameterKeysResolver keyResolver, CacheAdapterBuilder cacheBuilder,
-                          AnnotationTypeHandler annotationTypeHandler) {
-        this.linker = linker;
-        this.injectableConstructorResolver = injectableConstructorResolver;
-        this.keyResolver = keyResolver;
-        this.membersInjectorFactory = new CachedMembersInjectorFactory(
-                this, keyResolver, injectableConstructorResolver, annotationTypeHandler, cacheBuilder
-        );
+                          InjectableMembersResolver membersResolver, ProcessorInterceptor processorInterceptor) {
+        this.linker = checkNotNull(linker);
+        this.injectableConstructorResolver = checkNotNull(injectableConstructorResolver);
+        this.membersInjectorFactory = processorInterceptor.interceptMembersInjectorFactory(new SimpleMembersInjectorFactory(
+                injectableConstructorResolver, membersResolver, this
+        ));
     }
 
     private SimpleInjector(InternalLinker linker, SimpleInjector prototype) {
         this.linker = linker;
         this.injectableConstructorResolver = prototype.injectableConstructorResolver;
-        this.keyResolver = prototype.keyResolver;
         this.membersInjectorFactory = prototype.membersInjectorFactory;
     }
 
@@ -63,7 +61,7 @@ public class SimpleInjector implements Injector {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public <T> T getInstance(Key<T> key) {
 
         Objects.requireNonNull(key);
@@ -72,22 +70,27 @@ public class SimpleInjector implements Injector {
             return (T) this;
         }
 
-        Link<T> link = linker.findLink(key);
-
-        if (link != null) {
-            if (!link.isProviderInjected()) {
-                Provider<T> provider = link.getProvider();
-                injectMembers(provider);
-                link.updateProvider(provider);
-                link.setProviderInjected(true);
-                linker.setLink(link);
+        if (key.getType().getRawType() == Provider.class) {
+            Key<?> providerKey = Providers.keyOfProvider((Key) key);
+            Provider<?> provider = getProvider(providerKey);
+            if (provider != null) {
+                return (T) provider;
             }
-            return link.getProvider().get();
+            return null;
+        }
+
+        Provider<T> provider = getProvider(key);
+        if (provider != null) {
+            return provider.get();
         }
 
         ConstructorInjector<T> constructorInjector = membersInjectorFactory.getConstructorInjector(key.getType());
         T instance = constructorInjector.createInstance();
-        injectMembers(instance);
+
+        if (instance != null) {
+            injectMembers(instance);
+        }
+
         return instance;
 
     }
@@ -100,6 +103,26 @@ public class SimpleInjector implements Injector {
             module.configure(isolatedLinker);
         }
         return new SimpleInjector(isolatedLinker, this);
+
+    }
+
+    private <T> Provider<T> getProvider(Key<T> key) {
+
+        Link<T> link = linker.findLink(key);
+
+        if (link == null) {
+            return null;
+        }
+
+        if (!link.isProviderInjected()) {
+            Provider<T> provider = link.getProvider();
+            injectMembers(provider);
+            link.updateProvider(provider);
+            link.setProviderInjected(true);
+            linker.setLink(link);
+        }
+
+        return link.getProvider();
 
     }
 

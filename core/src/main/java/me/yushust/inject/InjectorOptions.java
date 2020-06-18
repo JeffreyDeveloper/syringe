@@ -1,20 +1,27 @@
 package me.yushust.inject;
 
-import me.yushust.inject.cache.CacheAdapterBuilder;
-import me.yushust.inject.cache.DynamicAdapterBuilder;
+import me.yushust.inject.process.ProcessorInterceptor;
+import me.yushust.inject.resolve.AnnotationOptionalInjectionChecker;
+import me.yushust.inject.resolve.OptionalInjectionChecker;
 
-import java.util.Objects;
+import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
 public class InjectorOptions {
 
-    private final CacheAdapterBuilder cacheAdapterBuilder;
+    private final OptionalInjectionChecker optionalInjectionChecker;
+    private final ProcessorInterceptor processorInterceptor;
 
-    public InjectorOptions(CacheAdapterBuilder cacheAdapterBuilder) {
-        this.cacheAdapterBuilder = cacheAdapterBuilder;
+    private InjectorOptions(OptionalInjectionChecker optionalInjectionChecker, ProcessorInterceptor processorInterceptor) {
+        this.optionalInjectionChecker = optionalInjectionChecker;
+        this.processorInterceptor = processorInterceptor;
     }
 
-    public CacheAdapterBuilder getCacheAdapterBuilder() {
-        return cacheAdapterBuilder;
+    public OptionalInjectionChecker getOptionalInjectionChecker() {
+        return optionalInjectionChecker;
+    }
+
+    public ProcessorInterceptor getProcessorInterceptor() {
+        return processorInterceptor;
     }
 
     public static Builder builder() {
@@ -23,16 +30,23 @@ public class InjectorOptions {
 
     public static class Builder {
 
-        private CacheAdapterBuilder cacheAdapterBuilder = new DynamicAdapterBuilder();
+        private OptionalInjectionChecker optionalInjectionChecker = new AnnotationOptionalInjectionChecker();
+        private ProcessorInterceptor processorInterceptor = ProcessorInterceptor.dummy();
 
-        public Builder cacheAdapterBuilder(CacheAdapterBuilder cacheAdapterBuilder) {
-            Objects.requireNonNull(cacheAdapterBuilder);
-            this.cacheAdapterBuilder = cacheAdapterBuilder;
+        public Builder optionalInjectionChecker(OptionalInjectionChecker optionalInjectionChecker) {
+            checkNotNull(optionalInjectionChecker);
+            this.optionalInjectionChecker = optionalInjectionChecker;
+            return this;
+        }
+
+        public Builder processorInterceptor(ProcessorInterceptor processorInterceptor) {
+            checkNotNull(processorInterceptor);
+            this.processorInterceptor = processorInterceptor;
             return this;
         }
 
         public InjectorOptions build() {
-            return new InjectorOptions(cacheAdapterBuilder);
+            return new InjectorOptions(optionalInjectionChecker, processorInterceptor);
         }
 
     }
