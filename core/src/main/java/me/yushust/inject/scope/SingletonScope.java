@@ -3,6 +3,7 @@ package me.yushust.inject.scope;
 import me.yushust.inject.Provider;
 import me.yushust.inject.identity.Key;
 import me.yushust.inject.Injector;
+import me.yushust.inject.Inject;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
