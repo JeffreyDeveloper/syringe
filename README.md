@@ -89,7 +89,7 @@ cd syringe
 # Install syringe using Maven
 mvn clean install 
 ```
-### Maven dependency:
+### Maven dependency
 ```xml
 <dependency>
     <groupId>me.yushust.inject</groupId>

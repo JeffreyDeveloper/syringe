@@ -1,7 +1,8 @@
 package me.yushust.inject.bind;
 
 import me.yushust.inject.identity.Key;
-import static me.yushust.inject.internal.Preconditions.*;
+import static me.yushust.inject.internal.Preconditions.checkNotNull;
+import static me.yushust.inject.internal.Preconditions.checkState;
 
 public abstract class AbstractModule implements Module {
 
