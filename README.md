@@ -29,7 +29,7 @@ import me.yushust.inject.bind.Binder;
 public class MySimpleModule implements Module {
 
     @Override
-    public void configure(Linker binder) {
+    public void configure(Binder binder) {
 
     }
 
@@ -39,24 +39,24 @@ So, we will make a binding, from Foo to Bar
  *Foo must implement Bar*
 ```java
 @Override
-public void configure(Linker binder) {
-    binder.binding(Foo.class).to(Bar.class);
+public void configure(Binder binder) {
+    binder.bind(Foo.class).to(Bar.class);
 }
 ```
 We can also make generic links using `Token`
 ```java
 @Override
-public void configure(Linker binder) {
+public void configure(Binder binder) {
     // The {} are important!
-    binder.binding(new Token<List<String>>() {}).toInstance(new ArrayList<>());
+    binder.bind(new Token<List<String>>() {}).toInstance(new ArrayList<>());
     // The links to instance are Singleton by default
 }
 ```
 It is also possible to make links with annotations (called Qualifiers)
 ```java
 @Override
-public void configure(Linker binder) {
-    binder.binding(Foo.class)
+public void configure(Binder binder) {
+    binder.bind(Foo.class)
         .qualified(FooAnnotation.class)
         .to(Bar.class);
 }
@@ -66,12 +66,12 @@ So the injection would look like this:
 @Inject @FooAnnotation
 private Foo foo;
 ```
-*(FooAnnotation must be annotated with `@LinkingAnnotation`)*
+*(FooAnnotation must be annotated with `@BindingAnnotation` or `@Qualifier`)*
 Something like this:
 ```java
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.FIELD, ElementType.PARAMETER })
-@LinkingAnnotation
+@BindingAnnotation
 public @interface FooAnnotation {
 
 }
