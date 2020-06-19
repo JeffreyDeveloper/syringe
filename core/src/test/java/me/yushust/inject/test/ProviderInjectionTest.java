@@ -13,7 +13,7 @@ public class ProviderInjectionTest {
     @Test
     public void injectProvider() {
 
-        Injector injector = InjectorFactory.create(linker -> linker.link(A.class).toProvider(() -> new A("a.")));
+        Injector injector = InjectorFactory.create(linker -> linker.bind(A.class).toProvider(() -> new A("a.")));
 
         B b = injector.getInstance(B.class);
         A a = b.aProvider.get();

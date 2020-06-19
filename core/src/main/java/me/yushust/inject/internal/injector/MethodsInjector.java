@@ -5,6 +5,7 @@ import me.yushust.inject.exception.UnsupportedInjectionException;
 import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.internal.MembersInjector;
 import me.yushust.inject.resolve.InjectableMember;
+import me.yushust.inject.resolve.ResolvableKey;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
@@ -31,7 +32,7 @@ public class MethodsInjector implements MembersInjector {
 
         for (InjectableMember injection : injections) {
 
-            List<InjectableMember.KeyEntry<?>> parameterKeys = injection.getKeys();
+            List<ResolvableKey<?>> parameterKeys = injection.getKeys();
             Member member = injection.getMember();
 
             if (!(member instanceof Method)) {
@@ -44,7 +45,7 @@ public class MethodsInjector implements MembersInjector {
 
             for (int i = 0; i < parameterKeys.size(); i++) {
 
-                InjectableMember.KeyEntry<?> parameterKey = parameterKeys.get(i);
+                ResolvableKey<?> parameterKey = parameterKeys.get(i);
                 Object injectedValue = injector.getInstance(parameterKey.getKey());
 
                 if (injectedValue == null && !parameterKey.isOptional()) {

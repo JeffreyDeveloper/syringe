@@ -1,46 +1,61 @@
 package me.yushust.inject.scope;
 
+import me.yushust.inject.Inject;
+import me.yushust.inject.Injector;
 import me.yushust.inject.Provider;
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.Injector;
-import me.yushust.inject.Inject;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
 class SingletonScope implements Scope {
 
     @Override
     public <T> Provider<T> wrap(Key<T> key, Provider<T> unscoped) {
 
-        return new Provider<T>() {
+        // the provider is already scoped
+        if (unscoped instanceof SingletonProvider) {
+            return unscoped;
+        }
 
-            private final Lock instanceLock = new ReentrantLock();
-            private volatile T instance;
+        return new SingletonProvider<>(unscoped);
 
-            @Inject
-            public void injectMembersToProvider(Injector injector) {
-                injector.injectMembers(unscoped);
-            }
+    }
 
-            @Override
-            public T get() {
+    static class SingletonProvider<T> implements Provider<T> {
 
-                if (instance == null) {
-                    instanceLock.lock();
-                    try {
-                        if (instance == null) {
-                            instance = unscoped.get();
-                        }
-                    } finally {
-                        instanceLock.unlock();
+        private final Lock instanceLock = new ReentrantLock();
+        private final Provider<T> unscoped;
+        private volatile T instance;
+
+        SingletonProvider(Provider<T> unscoped) {
+            this.unscoped = checkNotNull(unscoped);
+        }
+
+        @Inject
+        public void injectMembersToProvider(Injector injector) {
+            injector.injectMembers(unscoped);
+        }
+
+        @Override
+        public T get() {
+
+            if (instance == null) {
+                instanceLock.lock();
+                try {
+                    if (instance == null) {
+                        instance = unscoped.get();
                     }
+                } finally {
+                    instanceLock.unlock();
                 }
-
-                return instance;
-
             }
-        };
+
+            return instance;
+
+        }
 
     }
 

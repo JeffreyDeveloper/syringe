@@ -23,40 +23,40 @@ Creating a module is as simple as creating a class that extends `Module` and ove
 `Linker` is like [Guice](https://github.com/google/guice)'s `Binder`
 The way to configure links is very similar to the way to configure bindings in  [Guice](https://github.com/google/guice)
 ```java
-import me.yushust.inject.link.Module;
-import me.yushust.inject.link.Linker;
+import me.yushust.inject.bind.Module;
+import me.yushust.inject.bind.Binder;
 
 public class MySimpleModule implements Module {
 
     @Override
-    public void configure(Linker linker) {
+    public void configure(Linker binder) {
 
     }
 
 }
 ```
-So, we will make a link, from Foo to Bar
+So, we will make a binding, from Foo to Bar
  *Foo must implement Bar*
 ```java
 @Override
-public void configure(Linker linker) {
-    linker.link(Foo.class).to(Bar.class);
+public void configure(Linker binder) {
+    binder.binding(Foo.class).to(Bar.class);
 }
 ```
 We can also make generic links using `Token`
 ```java
 @Override
-public void configure(Linker linker) {
+public void configure(Linker binder) {
     // The {} are important!
-    linker.link(new Token<List<String>>() {}).toInstance(new ArrayList<>());
+    binder.binding(new Token<List<String>>() {}).toInstance(new ArrayList<>());
     // The links to instance are Singleton by default
 }
 ```
 It is also possible to make links with annotations (called Qualifiers)
 ```java
 @Override
-public void configure(Linker linker) {
-    linker.link(Foo.class)
+public void configure(Linker binder) {
+    binder.binding(Foo.class)
         .qualified(FooAnnotation.class)
         .to(Bar.class);
 }

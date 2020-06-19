@@ -3,6 +3,7 @@ package me.yushust.inject.internal.injector;
 import me.yushust.inject.Injector;
 import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.resolve.InjectableMember;
+import me.yushust.inject.resolve.ResolvableKey;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -17,7 +18,7 @@ public class ReflectionConstructorInjector<T> implements ConstructorInjector<T> 
 
     private final Token<T> declaringClass;
     private final Constructor<T> constructor;
-    private final List<InjectableMember.KeyEntry<?>> parameterKeys;
+    private final List<ResolvableKey<?>> parameterKeys;
 
     @SuppressWarnings("unchecked")
     public ReflectionConstructorInjector(Token<T> declaringClass, Injector injector, InjectableMember constructor) {
@@ -43,7 +44,7 @@ public class ReflectionConstructorInjector<T> implements ConstructorInjector<T> 
 
         for (int i = 0; i < parameterKeys.size(); i++) {
 
-            InjectableMember.KeyEntry<?> key = parameterKeys.get(i);
+            ResolvableKey<?> key = parameterKeys.get(i);
             Object param = injector.getInstance(key.getKey());
 
             if (param == null && !key.isOptional()) {

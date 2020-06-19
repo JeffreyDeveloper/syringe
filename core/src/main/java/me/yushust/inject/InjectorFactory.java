@@ -1,9 +1,9 @@
 package me.yushust.inject;
 
+import me.yushust.inject.internal.BasicInternalBinder;
+import me.yushust.inject.internal.InternalBinder;
 import me.yushust.inject.process.ProcessorInterceptor;
-import me.yushust.inject.internal.InternalLinker;
-import me.yushust.inject.link.Module;
-import me.yushust.inject.internal.BasicInternalLinker;
+import me.yushust.inject.bind.Module;
 import me.yushust.inject.internal.SimpleInjector;
 import me.yushust.inject.resolve.AnnotationTypeHandler;
 import me.yushust.inject.resolve.resolver.*;
@@ -30,7 +30,7 @@ public final class InjectorFactory {
 
     public static Injector create(InjectorOptions options, Iterable<Module> modules) {
 
-        InternalLinker linker = new BasicInternalLinker();
+        InternalBinder linker = new BasicInternalBinder();
 
         for (Module module : modules) {
             module.configure(linker);

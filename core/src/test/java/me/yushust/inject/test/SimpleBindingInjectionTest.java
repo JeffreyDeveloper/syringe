@@ -6,13 +6,13 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
 
-public class SimpleLinkInjectionTest {
+public class SimpleBindingInjectionTest {
 
     @Test
     public void testInjection() {
 
         Injector injector = InjectorFactory.create(linker -> {
-            linker.link(Foo.class).to(Bar.class);
+            linker.bind(Foo.class).to(Bar.class);
         });
 
         Foo foo = injector.getInstance(Foo.class);

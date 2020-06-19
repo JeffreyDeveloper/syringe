@@ -8,7 +8,9 @@ import java.util.Set;
 
 public interface InjectableMembersResolver {
 
-    Set<InjectableMember> resolveInjectableMembers(Token<?> token);
+    Set<InjectableMember> resolveInjectableFields(Token<?> token);
+
+    Set<InjectableMember> resolveInjectableMethods(Token<?> token);
 
     <T> InjectableMember transformConstructor(Token<T> declaringClass, Constructor<T> constructor);
 

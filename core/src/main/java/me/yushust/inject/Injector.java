@@ -1,7 +1,7 @@
 package me.yushust.inject;
 
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.link.Module;
+import me.yushust.inject.bind.Module;
 
 import java.util.Arrays;
 

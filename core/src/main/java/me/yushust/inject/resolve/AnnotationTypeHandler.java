@@ -1,6 +1,6 @@
 package me.yushust.inject.resolve;
 
-import me.yushust.inject.LinkingAnnotation;
+import me.yushust.inject.BindingAnnotation;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.Annotation;
@@ -18,7 +18,7 @@ public class AnnotationTypeHandler {
             return true;
         }
 
-        return annotationType.isAnnotationPresent(LinkingAnnotation.class);
+        return annotationType.isAnnotationPresent(BindingAnnotation.class);
     }
 
 }

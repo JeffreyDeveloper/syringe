@@ -1,7 +1,8 @@
 package me.yushust.inject.name;
 
 import java.lang.annotation.Annotation;
-import java.util.Objects;
+
+import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
 public final class Names {
 
@@ -10,45 +11,42 @@ public final class Names {
     }
 
     public static Named named(String name) {
-        Objects.requireNonNull(name);
-        return new NamedImpl(name);
-    }
+        checkNotNull(name);
 
-    public static class NamedImpl implements Named {
+        return new Named() {
 
-        private final String name;
-
-        public NamedImpl(String name) {
-            Objects.requireNonNull(name);
-            this.name = name;
-        }
-
-        @Override
-        public String value() {
-            return name;
-        }
-
-        @Override
-        public Class<? extends Annotation> annotationType() {
-            return Named.class;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
+            @Override
+            public String value() {
+                return name;
             }
-            if (!(o instanceof Named)) {
-                return false;
-            }
-            NamedImpl named = (NamedImpl) o;
-            return name.equals(named.name);
-        }
 
-        @Override
-        public int hashCode() {
-            return name.hashCode();
-        }
+            @Override
+            public Class<? extends Annotation> annotationType() {
+                return Named.class;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) {
+                    return true;
+                }
+                if (!(o instanceof Named)) {
+                    return false;
+                }
+                Named named = (Named) o;
+                return name.equals(named.value());
+            }
+
+            @Override
+            public int hashCode() {
+                return name.hashCode();
+            }
+
+            @Override
+            public String toString() {
+                return "@" + Named.class.getName() + "(value=" + value() + ")";
+            }
+        };
 
     }
 

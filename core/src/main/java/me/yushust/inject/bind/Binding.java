@@ -1,9 +1,9 @@
-package me.yushust.inject.link;
+package me.yushust.inject.bind;
 
 import me.yushust.inject.Provider;
 import me.yushust.inject.identity.Key;
 
-public interface Link<T> {
+public interface Binding<T> {
 
     Key<T> getKey();
 

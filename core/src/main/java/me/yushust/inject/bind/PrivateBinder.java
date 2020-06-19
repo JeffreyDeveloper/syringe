@@ -1,9 +1,9 @@
-package me.yushust.inject.link;
+package me.yushust.inject.bind;
 
 import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.Token;
 
-public interface IsolatedLinker extends Linker {
+public interface PrivateBinder extends Binder {
 
     <T> void expose(Class<T> key);
 

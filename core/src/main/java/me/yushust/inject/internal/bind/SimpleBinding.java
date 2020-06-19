@@ -1,20 +1,20 @@
-package me.yushust.inject.internal.link;
+package me.yushust.inject.internal.bind;
 
 import me.yushust.inject.Provider;
-import me.yushust.inject.link.Link;
+import me.yushust.inject.bind.Binding;
 import me.yushust.inject.identity.Key;
 
-import java.util.Objects;
+import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
-public class SimpleLink<T> implements Link<T> {
+public class SimpleBinding<T> implements Binding<T> {
 
     private final Key<T> key;
     private Provider<T> provider;
     private boolean providerInjected;
 
-    public SimpleLink(Key<T> key, Provider<T> provider) {
-        this.key = Objects.requireNonNull(key);
-        this.provider = Objects.requireNonNull(provider);
+    public SimpleBinding(Key<T> key, Provider<T> provider) {
+        this.key = checkNotNull(key);
+        this.provider = checkNotNull(provider);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class SimpleLink<T> implements Link<T> {
 
     @Override
     public void updateProvider(Provider<T> provider) {
-        this.provider = provider;
+        this.provider = checkNotNull(provider);
     }
 
     @Override

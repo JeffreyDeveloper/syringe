@@ -3,7 +3,6 @@ package me.yushust.inject.test;
 import me.yushust.inject.Inject;
 import me.yushust.inject.Injector;
 import me.yushust.inject.InjectorFactory;
-import me.yushust.inject.scope.Scopes;
 import org.junit.Test;
 
 import java.util.List;
@@ -16,9 +15,9 @@ public class ConstructorInjectionTest {
     @Test
     public void test() {
 
-        Injector injector = InjectorFactory.create(linker -> {
-        });
+        Injector injector = InjectorFactory.create();
         Foo foo = injector.getInstance(Foo.class);
+        assertNotNull(foo);
 
     }
 

@@ -36,7 +36,7 @@ public class ReflectionMemberKeyResolver implements MemberKeyResolver {
 
     @Override
     public Key<?> keyOf(Parameter parameter) {
-        Token<?> parameterToken = new Token<>(Types.wrap(parameter.getParameterizedType()));
+        Token<?> parameterToken = new Token<>(parameter.getParameterizedType());
 
         for (Annotation annotation : parameter.getDeclaredAnnotations()) {
             if (annotationTypeHandler.isQualifier(annotation)) {

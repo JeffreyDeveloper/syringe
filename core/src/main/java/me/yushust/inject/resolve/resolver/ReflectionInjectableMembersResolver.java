@@ -5,6 +5,7 @@ import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.resolve.InjectableMember;
 import me.yushust.inject.resolve.OptionalInjectionChecker;
+import me.yushust.inject.resolve.ResolvableKey;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -26,12 +27,11 @@ public class ReflectionInjectableMembersResolver implements InjectableMembersRes
     }
 
     @Override
-    public Set<InjectableMember> resolveInjectableMembers(Token<?> token) {
+    public Set<InjectableMember> resolveInjectableFields(Token<?> token) {
         checkNotNull(token);
 
         Set<InjectableMember> members = new HashSet<>();
 
-        // resolve fields
         for (Field field : token.getRawType().getDeclaredFields()) {
             if (field.getAnnotation(Inject.class) == null
                 && field.getAnnotation(javax.inject.Inject.class) == null) {
@@ -41,11 +41,18 @@ public class ReflectionInjectableMembersResolver implements InjectableMembersRes
             boolean optional = optionalInjectionChecker.isFieldOptional(field);
             field.setAccessible(true);
             members.add(new InjectableMember(token, field, Collections.singletonList(
-                    new InjectableMember.KeyEntry<>(key, optional)
+                    new ResolvableKey<>(key, optional)
             )));
         }
 
-        // resolve methods
+        return members;
+    }
+
+    @Override
+    public Set<InjectableMember> resolveInjectableMethods(Token<?> token) {
+        checkNotNull(token);
+        Set<InjectableMember> members = new HashSet<>();
+
         for (Method method : token.getRawType().getDeclaredMethods()) {
             if (method.getAnnotation(Inject.class) == null
                     && method.getAnnotation(javax.inject.Inject.class) == null) {
@@ -65,13 +72,13 @@ public class ReflectionInjectableMembersResolver implements InjectableMembersRes
         return new InjectableMember(declaringClass, constructor, resolveKeys(constructor.getParameters()));
     }
 
-    private List<InjectableMember.KeyEntry<?>> resolveKeys(Parameter[] parameters) {
-        List<InjectableMember.KeyEntry<?>> keys = new LinkedList<>();
+    private List<ResolvableKey<?>> resolveKeys(Parameter[] parameters) {
+        List<ResolvableKey<?>> keys = new LinkedList<>();
 
         for (Parameter parameter : parameters) {
             Key<?> key = memberKeyResolver.keyOf(parameter);
             boolean optional = optionalInjectionChecker.isParameterOptional(parameter);
-            keys.add(new InjectableMember.KeyEntry<>(key, optional));
+            keys.add(new ResolvableKey<>(key, optional));
         }
 
         return keys;

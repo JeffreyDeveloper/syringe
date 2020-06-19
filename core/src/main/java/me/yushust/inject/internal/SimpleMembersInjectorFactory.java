@@ -28,10 +28,11 @@ public class SimpleMembersInjectorFactory implements MembersInjectorFactory {
     @Override
     public MembersInjector getMembersInjector(Token<?> key) {
 
-        Set<InjectableMember> members = membersResolver.resolveInjectableMembers(key);
+        Set<InjectableMember> fields = membersResolver.resolveInjectableFields(key);
+        Set<InjectableMember> methods = membersResolver.resolveInjectableMethods(key);
 
-        MembersInjector fieldsInjector = new FieldsInjector(injector, key, members);
-        MembersInjector methodsInjector = new MethodsInjector(injector, key, members);
+        MembersInjector fieldsInjector = new FieldsInjector(injector, key, fields);
+        MembersInjector methodsInjector = new MethodsInjector(injector, key, methods);
 
         return new DelegatingMembersInjector(fieldsInjector, methodsInjector);
 

@@ -4,9 +4,9 @@ import me.yushust.inject.Inject;
 import me.yushust.inject.Injector;
 import me.yushust.inject.InjectorFactory;
 import me.yushust.inject.scope.Scopes;
-import org.junit.Assert;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import java.util.Objects;
 
 public class SingletonScopeInjectionTest {
@@ -14,25 +14,20 @@ public class SingletonScopeInjectionTest {
     @Test
     public void testInjection() {
 
-        Injector injector = InjectorFactory.create(linker -> {
-            linker.link(Foo.class).toProvider(Foo::new).scope(Scopes.SINGLETON);
+        Injector injector = InjectorFactory.create(binder -> {
+            binder.bind(Foo.class).toProvider(Foo::new).scope(Scopes.SINGLETON);
         });
 
-        Bar bar = injector.getInstance(Bar.class);
-        Assert.assertEquals(bar.foo1, bar.foo2);
+        Foo foo1 = injector.getInstance(Foo.class);
+        Foo foo2 = injector.getInstance(Foo.class);
 
-    }
-
-    public static class Bar {
-
-        @Inject private Foo foo1;
-        @Inject private Foo foo2;
+        assertEquals(foo1, foo2);
 
     }
 
     public static class Foo {
 
-        private double random = Math.random();
+        private final double random = Math.random();
 
         @Override
         public boolean equals(Object o) {
@@ -43,7 +38,7 @@ public class SingletonScopeInjectionTest {
                 return false;
             }
             Foo foo = (Foo) o;
-            return Double.compare(foo.random, random) == 0;
+            return random == foo.random;
         }
 
         @Override

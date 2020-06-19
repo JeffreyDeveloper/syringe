@@ -5,6 +5,7 @@ import me.yushust.inject.exception.UnsupportedInjectionException;
 import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.internal.MembersInjector;
 import me.yushust.inject.resolve.InjectableMember;
+import me.yushust.inject.resolve.ResolvableKey;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -35,7 +36,7 @@ public class FieldsInjector implements MembersInjector {
 
         for (InjectableMember injection : injections) {
 
-            InjectableMember.KeyEntry<?> keyEntry = injection.getKeys().get(0);
+            ResolvableKey<?> keyEntry = injection.getKeys().get(0);
 
             Member member = injection.getMember();
 
@@ -48,7 +49,7 @@ public class FieldsInjector implements MembersInjector {
 
             if (injectedValue == null && !keyEntry.isOptional()) {
                 throw new UnsupportedInjectionException(
-                        "Cannot create an instance for key " + keyEntry.toString() + " of class " + declaringClass.toString()
+                        "Cannot create an instance for key " + keyEntry.getKey().toString() + " of class " + declaringClass.toString()
                 );
             }
 

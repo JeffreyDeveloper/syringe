@@ -1,17 +1,17 @@
-package me.yushust.inject.link;
+package me.yushust.inject.bind;
 
 import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.Token;
 
 import java.util.Objects;
 
-public interface Linker {
+public interface Binder {
 
-    <T> LinkBuilder.Qualified<T> link(Class<T> type);
+    <T> BindingBuilder.Qualified<T> bind(Class<T> type);
 
-    <T> LinkBuilder.Qualified<T> link(Token<T> token);
+    <T> BindingBuilder.Qualified<T> bind(Token<T> token);
 
-    <T> LinkBuilder.Linkable<T> link(Key<T> key);
+    <T> BindingBuilder.Linkable<T> bind(Key<T> key);
 
     default void install(Module module) {
         Objects.requireNonNull(module);

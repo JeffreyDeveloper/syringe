@@ -1,6 +1,5 @@
 package me.yushust.inject.resolve;
 
-import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.Token;
 
 import java.lang.reflect.Member;
@@ -13,9 +12,9 @@ public class InjectableMember {
 
     private final Token<?> declaringClass;
     private final Member member;
-    private final List<KeyEntry<?>> keys;
+    private final List<ResolvableKey<?>> keys;
 
-    public InjectableMember(Token<?> declaringClass, Member member, List<KeyEntry<?>> keys) {
+    public InjectableMember(Token<?> declaringClass, Member member, List<ResolvableKey<?>> keys) {
         this.declaringClass = checkNotNull(declaringClass);
         this.member = checkNotNull(member);
         this.keys = unmodifiableList(keys);
@@ -29,29 +28,8 @@ public class InjectableMember {
         return member;
     }
 
-    public List<KeyEntry<?>> getKeys() {
+    public List<ResolvableKey<?>> getKeys() {
         return keys;
-    }
-
-    public static class KeyEntry<T> {
-
-        private final Key<T> key;
-        private final boolean optional;
-
-        public KeyEntry(Key<T> key, boolean optional) {
-            checkNotNull(key);
-            this.key = key;
-            this.optional = optional;
-        }
-
-        public Key<T> getKey() {
-            return key;
-        }
-
-        public boolean isOptional() {
-            return optional;
-        }
-
     }
 
 }

@@ -1,4 +1,4 @@
-package me.yushust.inject.link;
+package me.yushust.inject.bind;
 
 import me.yushust.inject.Provider;
 import me.yushust.inject.identity.Key;
@@ -6,17 +6,19 @@ import me.yushust.inject.scope.Scope;
 
 import java.lang.annotation.Annotation;
 
-public interface LinkBuilder<T> {
+public interface BindingBuilder<T> {
 
     void scope(Scope scope);
 
-    interface Linkable<T> extends LinkBuilder<T> {
+    interface Linkable<T> extends BindingBuilder<T> {
 
-        LinkBuilder<T> to(Class<? extends T> target);
+        BindingBuilder<T> to(Class<? extends T> target);
 
-        LinkBuilder<T> to(Key<? extends T> target);
+        BindingBuilder<T> to(Key<? extends T> target);
 
-        LinkBuilder<T> toProvider(Provider<? extends T> provider);
+        BindingBuilder<T> toProvider(Provider<? extends T> provider);
+
+        BindingBuilder<T> toProvider(Class<? extends Provider<? extends T>> provider);
 
         void toInstance(T instance);
 
