@@ -55,7 +55,7 @@ public class Token<T> {
         }
 
         Token<?> other = (Token<?>) o;
-        return Types.equals(type, other.type);
+        return Types.typeEquals(type, other.type);
     }
 
     @Override

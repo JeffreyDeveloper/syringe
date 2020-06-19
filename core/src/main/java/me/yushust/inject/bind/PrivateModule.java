@@ -3,7 +3,9 @@ package me.yushust.inject.bind;
 import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.Token;
 
-import static me.yushust.inject.internal.Preconditions.*;
+import static me.yushust.inject.internal.Preconditions.checkNotNull;
+import static me.yushust.inject.internal.Preconditions.checkState;
+import static me.yushust.inject.internal.Preconditions.checkArgument;
 
 public abstract class PrivateModule implements Module {
 

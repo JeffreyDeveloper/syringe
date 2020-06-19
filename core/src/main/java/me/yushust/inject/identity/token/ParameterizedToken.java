@@ -44,7 +44,7 @@ class ParameterizedToken implements ParameterizedType {
     @Override
     public boolean equals(Object other) {
         return other instanceof ParameterizedType
-                && Types.equals(this, (ParameterizedType) other);
+                && Types.typeEquals(this, (ParameterizedType) other);
     }
 
     @Override

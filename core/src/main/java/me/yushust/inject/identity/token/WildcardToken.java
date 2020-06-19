@@ -46,7 +46,7 @@ class WildcardToken implements WildcardType {
             return false;
         }
         WildcardType other = (WildcardType) o;
-        return Types.equals(this, other);
+        return Types.typeEquals(this, other);
     }
 
     @Override

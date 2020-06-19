@@ -30,7 +30,7 @@ class GenericArrayToken implements GenericArrayType {
             return false;
         }
         GenericArrayType other = (GenericArrayType) o;
-        return Types.equals(this, other);
+        return Types.typeEquals(this, other);
     }
 
     @Override

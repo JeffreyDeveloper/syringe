@@ -2,7 +2,7 @@ package me.yushust.inject.identity;
 
 import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.identity.token.Types;
-import static me.yushust.inject.internal.Preconditions.*;
+import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;

@@ -74,7 +74,7 @@ public final class Types {
         throw new IllegalArgumentException();
     }
 
-    public static boolean equals(Type a, Type b) {
+    public static boolean typeEquals(Type a, Type b) {
 
         if (a == b) {
             return true;
@@ -109,7 +109,7 @@ public final class Types {
 
             GenericArrayType ga = (GenericArrayType) a;
             GenericArrayType gb = (GenericArrayType) b;
-            return equals(ga.getGenericComponentType(), gb.getGenericComponentType());
+            return typeEquals(ga.getGenericComponentType(), gb.getGenericComponentType());
         }
 
         if (a instanceof WildcardType) {
