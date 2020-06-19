@@ -1,6 +1,7 @@
 package me.yushust.inject.test.identity;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.Token;

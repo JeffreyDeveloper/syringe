@@ -1,6 +1,5 @@
 package me.yushust.inject.test.scope;
 
-import me.yushust.inject.Inject;
 import me.yushust.inject.Injector;
 import me.yushust.inject.InjectorFactory;
 import me.yushust.inject.scope.Scopes;

@@ -10,7 +10,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.util.List;
 
-import static me.yushust.inject.internal.Preconditions.*;
+import static me.yushust.inject.internal.Preconditions.checkNotNull;
+import static me.yushust.inject.internal.Preconditions.checkArgument;
+import static me.yushust.inject.internal.Preconditions.checkState;
 
 public class ReflectionConstructorInjector<T> implements ConstructorInjector<T> {
 

@@ -2,7 +2,6 @@ package me.yushust.inject.resolve.resolver;
 
 import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.Token;
-import me.yushust.inject.identity.token.Types;
 import me.yushust.inject.resolve.AnnotationTypeHandler;
 
 import java.lang.annotation.Annotation;
