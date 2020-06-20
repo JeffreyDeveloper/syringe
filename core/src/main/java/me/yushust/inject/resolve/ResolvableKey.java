@@ -2,6 +2,8 @@ package me.yushust.inject.resolve;
 
 import me.yushust.inject.identity.Key;
 
+import java.util.Objects;
+
 import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
 public class ResolvableKey<T> {
@@ -23,4 +25,17 @@ public class ResolvableKey<T> {
         return optional;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ResolvableKey<?> that = (ResolvableKey<?>) o;
+        return optional == that.optional &&
+                Objects.equals(key, that.key);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(key, optional);
+    }
 }

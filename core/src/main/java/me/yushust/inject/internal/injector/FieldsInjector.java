@@ -2,13 +2,11 @@ package me.yushust.inject.internal.injector;
 
 import me.yushust.inject.Injector;
 import me.yushust.inject.exception.UnsupportedInjectionException;
-import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.internal.MembersInjector;
 import me.yushust.inject.resolve.InjectableMember;
 import me.yushust.inject.resolve.ResolvableKey;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Member;
 import java.util.Set;
 
 import static me.yushust.inject.internal.Preconditions.*;
@@ -16,10 +14,10 @@ import static me.yushust.inject.internal.Preconditions.*;
 public class FieldsInjector implements MembersInjector {
 
     private final Injector injector;
-    private final Token<?> declaringClass;
+    private final Class<?> declaringClass;
     private final Set<InjectableMember> injections;
 
-    public FieldsInjector(Injector injector, Token<?> declaringClass, Set<InjectableMember> injectableMembers) {
+    public FieldsInjector(Injector injector, Class<?> declaringClass, Set<InjectableMember> injectableMembers) {
         this.injector = checkNotNull(injector);
         this.declaringClass = checkNotNull(declaringClass);
         this.injections = checkNotNull(injectableMembers);
@@ -30,7 +28,7 @@ public class FieldsInjector implements MembersInjector {
 
         checkNotNull(instance);
         checkState(
-                instance.getClass() == declaringClass.getRawType(),
+                instance.getClass() == declaringClass,
                 "Provided value isn't compatible with specified declaring class"
         );
 
@@ -38,13 +36,7 @@ public class FieldsInjector implements MembersInjector {
 
             ResolvableKey<?> keyEntry = injection.getKeys().get(0);
 
-            Member member = injection.getMember();
-
-            if (!(member instanceof Field)) {
-                continue;
-            }
-
-            Field field = (Field) member;
+            Field field = (Field) injection.getMember();
             Object injectedValue = injector.getInstance(keyEntry.getKey());
 
             if (injectedValue == null && !keyEntry.isOptional()) {

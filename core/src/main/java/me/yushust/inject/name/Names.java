@@ -39,7 +39,7 @@ public final class Names {
 
             @Override
             public int hashCode() {
-                return name.hashCode();
+                return (127 * "value".hashCode()) ^ name.hashCode();
             }
 
             @Override

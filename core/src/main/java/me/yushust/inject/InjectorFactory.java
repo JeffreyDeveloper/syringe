@@ -30,10 +30,10 @@ public final class InjectorFactory {
 
     public static Injector create(InjectorOptions options, Iterable<Module> modules) {
 
-        InternalBinder linker = new SimpleBinder();
+        InternalBinder binder = new SimpleBinder();
 
         for (Module module : modules) {
-            module.configure(linker);
+            module.configure(binder);
         }
 
         ProcessorInterceptor interceptor = options.getProcessorInterceptor();
@@ -46,7 +46,7 @@ public final class InjectorFactory {
                         new ReflectionInjectableMembersResolver(options.getOptionalInjectionChecker(), memberKeyResolver)
         );
 
-        return new SimpleInjector(linker, constructorResolver, injectableMembersResolver, interceptor);
+        return new SimpleInjector(binder, constructorResolver, injectableMembersResolver, interceptor);
     }
 
 }

@@ -7,7 +7,6 @@ import me.yushust.inject.process.ProcessorInterceptor;
 import me.yushust.inject.bind.Binding;
 import me.yushust.inject.exception.UnsupportedInjectionException;
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.bind.Module;
 import me.yushust.inject.resolve.resolver.InjectableConstructorResolver;
 import me.yushust.inject.resolve.resolver.InjectableMembersResolver;
@@ -48,8 +47,7 @@ public class SimpleInjector implements Injector {
         checkNotNull(object);
 
         Class<?> clazz = object.getClass();
-        Token<?> token = new Token<>(clazz);
-        MembersInjector injector = membersInjectorFactory.getMembersInjector(token);
+        MembersInjector injector = membersInjectorFactory.getMembersInjector(clazz);
 
         try {
             injector.injectMembers(object);
@@ -90,7 +88,7 @@ public class SimpleInjector implements Injector {
             }
         }
 
-        ConstructorInjector<T> constructorInjector = membersInjectorFactory.getConstructorInjector(key.getType());
+        ConstructorInjector<T> constructorInjector = (ConstructorInjector<T>) membersInjectorFactory.getConstructorInjector(key.getType().getRawType());
         T instance = constructorInjector.createInstance();
 
         if (instance != null) {
@@ -111,7 +109,7 @@ public class SimpleInjector implements Injector {
 
     }
 
-    private <T> Provider<T> getProvider(Key<T> key) {
+    public <T> Provider<T> getProvider(Key<T> key) {
 
         Binding<T> binding = binder.findBinding(key);
 

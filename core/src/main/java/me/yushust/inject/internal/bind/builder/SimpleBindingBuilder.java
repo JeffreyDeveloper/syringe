@@ -17,6 +17,7 @@ import me.yushust.inject.scope.Scope;
 import java.lang.annotation.Annotation;
 
 import static me.yushust.inject.internal.Preconditions.checkNotNull;
+import static me.yushust.inject.internal.Preconditions.checkState;
 
 @SuppressWarnings("unchecked")
 public class SimpleBindingBuilder<T> implements BindingBuilder.Qualified<T> {
@@ -38,7 +39,7 @@ public class SimpleBindingBuilder<T> implements BindingBuilder.Qualified<T> {
 
     @Override
     public Linkable<T> qualified(Class<? extends Annotation> qualifierType) {
-        checkAnnotationState();
+        requireNullKey();
         key = Key.of(type, qualifierType, null);
         type = null;
         return this;
@@ -46,7 +47,7 @@ public class SimpleBindingBuilder<T> implements BindingBuilder.Qualified<T> {
 
     @Override
     public Linkable<T> qualified(Annotation qualifier) {
-        checkAnnotationState();
+        requireNullKey();
         key = Key.of(type, qualifier);
         type = null;
         return this;
@@ -64,34 +65,34 @@ public class SimpleBindingBuilder<T> implements BindingBuilder.Qualified<T> {
 
     @Override
     public BindingBuilder<T> to(Key<? extends T> target) {
-        checkTargetingState();
+        createKeyIfAbsent();
         binder.setBinding(new LinkedBinding<>(key, target));
         return this;
     }
 
     @Override
     public BindingBuilder<T> toProvider(Provider<? extends T> provider) {
-        checkTargetingState();
+        createKeyIfAbsent();
         binder.setBinding(new SimpleBinding<>(key, (Provider<T>) provider));
         return this;
     }
 
     @Override
     public BindingBuilder<T> toProvider(Class<? extends Provider<? extends T>> provider) {
-        checkTargetingState();
+        createKeyIfAbsent();
         binder.setBinding(new ProviderKeyBinding<>(key, provider));
         return this;
     }
 
     @Override
     public void toInstance(T instance) {
-        checkTargetingState();
+        createKeyIfAbsent();
         binder.setBinding(new InstanceBinding<>(key, instance));
     }
 
     @Override
     public void scope(Scope scope) {
-        checkTargetingState();
+        createKeyIfAbsent();
         Binding<T> binding = binder.findBinding(key);
 
         if (binding == null) {
@@ -104,22 +105,17 @@ public class SimpleBindingBuilder<T> implements BindingBuilder.Qualified<T> {
         binder.setBinding(new SimpleBinding<>(key, provider));
     }
 
-    private void checkTargetingState() {
-        if (type != null) {
+    private void createKeyIfAbsent() {
+        if (key == null && type != null) {
             key = Key.of(type);
+            type = null;
         }
-        if (key == null) {
-            throw new InvalidBindingException("There's no a key!");
-        }
+        checkState(key != null, "Couldn't create a key. There's not a type!");
     }
 
-    private void checkAnnotationState() {
-        if (key != null) {
-            throw new InvalidBindingException("The key already have an annotation strategy!");
-        }
-        if (type == null) {
-            throw new InvalidBindingException("Cannot add qualifier if the type isn't defined yet!");
-        }
+    private void requireNullKey() {
+        checkState(key == null, "The key is already created!");
+        checkState(type != null, "Couldn't create a key without a base type!");
     }
 
 }

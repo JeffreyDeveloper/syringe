@@ -2,7 +2,6 @@ package me.yushust.inject.resolve.resolver;
 
 import me.yushust.inject.Inject;
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.resolve.InjectableMember;
 import me.yushust.inject.resolve.OptionalInjectionChecker;
 import me.yushust.inject.resolve.ResolvableKey;
@@ -27,12 +26,12 @@ public class ReflectionInjectableMembersResolver implements InjectableMembersRes
     }
 
     @Override
-    public Set<InjectableMember> resolveInjectableFields(Token<?> token) {
-        checkNotNull(token);
+    public Set<InjectableMember> resolveInjectableFields(Class<?> type) {
+        checkNotNull(type);
 
         Set<InjectableMember> members = new HashSet<>();
 
-        for (Field field : token.getRawType().getDeclaredFields()) {
+        for (Field field : type.getDeclaredFields()) {
             if (field.getAnnotation(Inject.class) == null
                 && field.getAnnotation(javax.inject.Inject.class) == null) {
                 continue;
@@ -40,7 +39,7 @@ public class ReflectionInjectableMembersResolver implements InjectableMembersRes
             Key<?> key = memberKeyResolver.keyOf(field);
             boolean optional = optionalInjectionChecker.isFieldOptional(field);
             field.setAccessible(true);
-            members.add(new InjectableMember(token, field, Collections.singletonList(
+            members.add(new InjectableMember(type, field, Collections.singletonList(
                     new ResolvableKey<>(key, optional)
             )));
         }
@@ -49,24 +48,24 @@ public class ReflectionInjectableMembersResolver implements InjectableMembersRes
     }
 
     @Override
-    public Set<InjectableMember> resolveInjectableMethods(Token<?> token) {
-        checkNotNull(token);
+    public Set<InjectableMember> resolveInjectableMethods(Class<?> type) {
+        checkNotNull(type);
         Set<InjectableMember> members = new HashSet<>();
 
-        for (Method method : token.getRawType().getDeclaredMethods()) {
+        for (Method method : type.getDeclaredMethods()) {
             if (method.getAnnotation(Inject.class) == null
                     && method.getAnnotation(javax.inject.Inject.class) == null) {
                 continue;
             }
             method.setAccessible(true);
-            members.add(new InjectableMember(token, method, resolveKeys(method.getParameters())));
+            members.add(new InjectableMember(type, method, resolveKeys(method.getParameters())));
         }
 
         return members;
     }
 
     @Override
-    public <T> InjectableMember transformConstructor(Token<T> declaringClass, Constructor<T> constructor) {
+    public <T> InjectableMember transformConstructor(Class<T> declaringClass, Constructor<T> constructor) {
         checkNotNull(declaringClass);
         checkNotNull(constructor);
         return new InjectableMember(declaringClass, constructor, resolveKeys(constructor.getParameters()));

@@ -26,13 +26,13 @@ public class SimpleBinder implements InternalBinder {
     @Override
     public <T> BindingBuilder.Qualified<T> bind(Token<T> token) {
         checkNotNull(token);
-        return new SimpleBindingBuilder<T>(this, token);
+        return new SimpleBindingBuilder<>(this, token);
     }
 
     @Override
     public <T> BindingBuilder.Linkable<T> bind(Key<T> key) {
         checkNotNull(key);
-        return new SimpleBindingBuilder<T>(this, key);
+        return new SimpleBindingBuilder<>(this, key);
     }
 
     @Override

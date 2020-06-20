@@ -64,7 +64,7 @@ public class Key<T> {
         if (this == o) return true;
         if (!(o instanceof Key)) return false;
         Key<?> key = (Key<?>) o;
-        return type.equals(key.type) &&
+        return key.type.equals(type) &&
                 Objects.equals(qualifierType, key.qualifierType) &&
                 Objects.equals(qualifier, key.qualifier);
     }

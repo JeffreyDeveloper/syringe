@@ -1,7 +1,6 @@
 package me.yushust.inject.internal.injector;
 
 import me.yushust.inject.Injector;
-import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.resolve.InjectableMember;
 import me.yushust.inject.resolve.ResolvableKey;
 
@@ -18,12 +17,12 @@ public class ReflectionConstructorInjector<T> implements ConstructorInjector<T> 
 
     private final Injector injector;
 
-    private final Token<T> declaringClass;
+    private final Class<T> declaringClass;
     private final Constructor<T> constructor;
     private final List<ResolvableKey<?>> parameterKeys;
 
     @SuppressWarnings("unchecked")
-    public ReflectionConstructorInjector(Token<T> declaringClass, Injector injector, InjectableMember constructor) {
+    public ReflectionConstructorInjector(Class<T> declaringClass, Injector injector, InjectableMember constructor) {
         checkNotNull(constructor);
         this.declaringClass = checkNotNull(declaringClass);
         this.injector = checkNotNull(injector);
@@ -70,7 +69,7 @@ public class ReflectionConstructorInjector<T> implements ConstructorInjector<T> 
         try {
             return constructor.newInstance(parameters);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException("Failed to create a instance of class " + declaringClass.getRawType().getName(), e);
+            throw new RuntimeException("Failed to create a instance of class " + declaringClass.getName(), e);
         }
 
     }
