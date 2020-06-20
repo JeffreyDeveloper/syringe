@@ -49,7 +49,9 @@ public class ReflectionConstructorInjector<T> implements ConstructorInjector<T> 
             Object param = injector.getInstance(key.getKey());
 
             if (param == null && !key.isOptional()) {
-                throw new IllegalStateException("Cannot instance parameter " + i);
+                throw new IllegalStateException(
+                        "Cannot inject constructor. Parameter index: " + i + ". Declaring class: " + declaringClass.getName()
+                );
             }
 
             parameters[i] = param;
