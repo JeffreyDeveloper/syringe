@@ -32,6 +32,11 @@ public class KeyEqualityTest {
 
         assertEquals(annotatedArrayListKey, annotatedListKey);
 
+        Key<ArrayList<?>> annotatedArrayList = new Key<ArrayList<?>>(null, Names.named("hey")) {};
+        Key<ArrayList<?>> annotatedArrayList2 = new Key<ArrayList<?>>(Named.class, Names.named("hey")) {};
+
+        assertEquals(annotatedArrayList, annotatedArrayList2);
+
     }
 
 }

@@ -6,6 +6,8 @@ import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.internal.bind.builder.SimpleBindingBuilder;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -50,6 +52,13 @@ public class SimpleBinder implements InternalBinder {
     public <T> Binding<T> findBinding(Key<T> key) {
         checkNotNull(key);
         return (Binding<T>) bindingsMap.get(key);
+    }
+
+    @Override
+    public Collection<Binding<?>> getBindings() {
+        return Collections.unmodifiableCollection(
+                bindingsMap.values()
+        );
     }
 
 }

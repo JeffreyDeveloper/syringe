@@ -1,11 +1,15 @@
 package me.yushust.inject;
 
+import me.yushust.inject.bind.Binding;
 import me.yushust.inject.identity.Key;
 import me.yushust.inject.bind.Module;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 public interface Injector {
+
+    Collection<Binding<?>> getBindings();
 
     void injectMembers(Object object);
 

@@ -26,7 +26,13 @@ public class Key<T> {
         ParameterizedType parameterized = (ParameterizedType) superClass;
 
         this.type = new Token<>(parameterized.getActualTypeArguments()[0]);
-        this.qualifierType = qualifierType;
+
+        if (qualifier != null && qualifierType == null) {
+            this.qualifierType = qualifier.annotationType();
+        } else {
+            this.qualifierType = qualifierType;
+        }
+
         this.qualifier = qualifier;
 
     }
@@ -47,6 +53,10 @@ public class Key<T> {
 
     public final Annotation getQualifier() {
         return qualifier;
+    }
+
+    public final Class<? extends Annotation> getQualifierType() {
+        return qualifierType;
     }
 
     @Override

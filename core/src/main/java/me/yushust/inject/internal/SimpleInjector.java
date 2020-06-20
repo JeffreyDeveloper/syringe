@@ -13,6 +13,8 @@ import me.yushust.inject.resolve.resolver.InjectableConstructorResolver;
 import me.yushust.inject.resolve.resolver.InjectableMembersResolver;
 import me.yushust.inject.util.Providers;
 
+import java.util.Collection;
+
 import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
 public class SimpleInjector implements Injector {
@@ -34,6 +36,11 @@ public class SimpleInjector implements Injector {
         this.binder = binder;
         this.injectableConstructorResolver = prototype.injectableConstructorResolver;
         this.membersInjectorFactory = prototype.membersInjectorFactory;
+    }
+
+    @Override
+    public Collection<Binding<?>> getBindings() {
+        return binder.getBindings();
     }
 
     @Override

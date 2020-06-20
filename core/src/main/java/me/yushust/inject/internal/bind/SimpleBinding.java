@@ -42,4 +42,11 @@ public class SimpleBinding<T> implements Binding<T> {
         this.providerInjected = providerInjected;
     }
 
+    @Override
+    public String toString() {
+        return "Binding{" +
+                "key=" + key +
+                ", provider=" + provider +
+                '}';
+    }
 }
