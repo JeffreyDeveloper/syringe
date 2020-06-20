@@ -9,47 +9,47 @@ import me.yushust.inject.internal.bind.builder.SimpleBindingBuilder;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class BasicInternalBinder implements InternalBinder {
+import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
-    protected final Map<Key<?>, Binding<?>> links = new ConcurrentHashMap<>();
+public class SimpleBinder implements InternalBinder {
+
+    private final Map<Key<?>, Binding<?>> bindingsMap = new ConcurrentHashMap<>();
 
     @Override
     public <T> BindingBuilder.Qualified<T> bind(Class<T> type) {
+        checkNotNull(type);
         return bind(new Token<>(type));
     }
 
     @Override
     public <T> BindingBuilder.Qualified<T> bind(Token<T> token) {
-        return new SimpleBindingBuilder<>(this, token);
+        checkNotNull(token);
+        return new SimpleBindingBuilder<T>(this, token);
     }
 
     @Override
     public <T> BindingBuilder.Linkable<T> bind(Key<T> key) {
-        return new SimpleBindingBuilder<>(this, key);
-    }
-
-    @Override
-    public <T> void removeBinding(Token<T> token) {
-        removeBinding(Key.of(token));
+        checkNotNull(key);
+        return new SimpleBindingBuilder<T>(this, key);
     }
 
     @Override
     public <T> void removeBinding(Key<T> key) {
-        Preconditions.checkNotNull(key);
-        links.remove(key);
+        checkNotNull(key);
+        bindingsMap.remove(key);
     }
 
     @Override
     public <T> void setBinding(Binding<T> binding) {
-        Preconditions.checkNotNull(binding);
-        links.put(binding.getKey(), binding);
+        checkNotNull(binding);
+        bindingsMap.put(binding.getKey(), binding);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <T> Binding<T> findBinding(Key<T> key) {
-        Preconditions.checkNotNull(key);
-        return (Binding<T>) links.get(key);
+        checkNotNull(key);
+        return (Binding<T>) bindingsMap.get(key);
     }
 
 }

@@ -13,8 +13,6 @@ import me.yushust.inject.resolve.resolver.InjectableConstructorResolver;
 import me.yushust.inject.resolve.resolver.InjectableMembersResolver;
 import me.yushust.inject.util.Providers;
 
-import java.util.Objects;
-
 import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
 public class SimpleInjector implements Injector {
@@ -40,8 +38,7 @@ public class SimpleInjector implements Injector {
 
     @Override
     public void injectMembers(Object object) {
-
-        Objects.requireNonNull(object);
+        checkNotNull(object);
 
         Class<?> clazz = object.getClass();
         Token<?> token = new Token<>(clazz);
@@ -52,7 +49,6 @@ public class SimpleInjector implements Injector {
         } catch (UnsupportedInjectionException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -61,10 +57,14 @@ public class SimpleInjector implements Injector {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "rawtypes"})
     public <T> T getInstance(Key<T> key) {
+        return getInstance(key, false);
+    }
 
-        Objects.requireNonNull(key);
+    @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public <T> T getInstance(Key<T> key, boolean ignoreExplicitBindings) {
+        checkNotNull(key);
 
         if (key.getType().getRawType() == Injector.class) {
             return (T) this;
@@ -76,9 +76,11 @@ public class SimpleInjector implements Injector {
             return (T) provider;
         }
 
-        Provider<T> provider = getProvider(key);
-        if (provider != null) {
-            return provider.get();
+        if (!ignoreExplicitBindings) {
+            Provider<T> provider = getProvider(key);
+            if (provider != null) {
+                return provider.get();
+            }
         }
 
         ConstructorInjector<T> constructorInjector = membersInjectorFactory.getConstructorInjector(key.getType());
@@ -89,7 +91,6 @@ public class SimpleInjector implements Injector {
         }
 
         return instance;
-
     }
 
     @Override

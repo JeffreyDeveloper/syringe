@@ -6,12 +6,14 @@ import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.bind.PrivateBinder;
 
-public class PrivateInternalBinder extends BasicInternalBinder implements PrivateBinder, InternalBinder {
+import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
-    private final InternalBinder parentLinker;
+public class PrivateInternalBinder extends SimpleBinder implements PrivateBinder, InternalBinder {
 
-    public PrivateInternalBinder(InternalBinder parentLinker) {
-        this.parentLinker = Preconditions.checkNotNull(parentLinker);
+    private final InternalBinder parentBinder;
+
+    public PrivateInternalBinder(InternalBinder parentBinder) {
+        this.parentBinder = checkNotNull(parentBinder);
     }
 
     @Override
@@ -31,15 +33,16 @@ public class PrivateInternalBinder extends BasicInternalBinder implements Privat
             throw new InvalidBindingException("The exposing link isn't present!");
         }
         removeBinding(key);
-        parentLinker.setBinding(binding);
+        parentBinder.setBinding(binding);
     }
 
     @Override
     public <T> Binding<T> findBinding(Key<T> key) {
         Binding<T> binding = super.findBinding(key);
         if (binding == null) {
-            return parentLinker.findBinding(key);
+            return parentBinder.findBinding(key);
         }
         return binding;
     }
+
 }

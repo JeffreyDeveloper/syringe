@@ -13,6 +13,8 @@ public interface Injector {
 
     <T> T getInstance(Key<T> key);
 
+    <T> T getInstance(Key<T> key, boolean ignoreExplicitBindings);
+
     default Injector createChildInjector(Module... modules) {
         return createChildInjector(Arrays.asList(modules));
     };

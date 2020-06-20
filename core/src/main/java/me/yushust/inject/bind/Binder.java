@@ -3,7 +3,7 @@ package me.yushust.inject.bind;
 import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.Token;
 
-import java.util.Objects;
+import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
 public interface Binder {
 
@@ -14,7 +14,7 @@ public interface Binder {
     <T> BindingBuilder.Linkable<T> bind(Key<T> key);
 
     default void install(Module module) {
-        Objects.requireNonNull(module);
+        checkNotNull(module);
         module.configure(this);
     }
 
