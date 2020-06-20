@@ -41,7 +41,7 @@ public class ProviderKeyBindingTest {
 
         @Override
         public Foo get() {
-            return new Foo("id");
+            return new Foo("test-id");
         }
 
     }
