@@ -21,29 +21,27 @@ public class ReflectionMemberKeyResolver implements MemberKeyResolver {
     @Override
     public Key<?> keyOf(Field field) {
         checkNotNull(field);
-
         Token<?> fieldToken = new Token<>(field.getGenericType());
-
-        for (Annotation annotation : field.getDeclaredAnnotations()) {
-            if (annotationTypeHandler.isQualifier(annotation)) {
-                return Key.of(fieldToken, annotation);
-            }
-        }
-
-        return Key.of(fieldToken);
+        return getKey(fieldToken, field.getDeclaredAnnotations());
     }
 
     @Override
     public Key<?> keyOf(Parameter parameter) {
+        checkNotNull(parameter);
         Token<?> parameterToken = new Token<>(parameter.getParameterizedType());
+        return getKey(parameterToken, parameter.getDeclaredAnnotations());
+    }
 
-        for (Annotation annotation : parameter.getDeclaredAnnotations()) {
+    private Key<?> getKey(Token<?> token, Annotation[] declaredAnnotations) {
+        for (Annotation annotation : declaredAnnotations) {
             if (annotationTypeHandler.isQualifier(annotation)) {
-                return Key.of(parameterToken, annotation);
+                if (annotationTypeHandler.isMarkerAnnotation(annotation)) {
+                    return Key.of(token, annotation.annotationType(), null);
+                }
+                return Key.of(token, annotation);
             }
         }
-
-        return Key.of(parameterToken);
+        return Key.of(token);
     }
 
 }

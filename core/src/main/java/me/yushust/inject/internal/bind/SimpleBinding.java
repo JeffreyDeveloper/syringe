@@ -9,7 +9,7 @@ import static me.yushust.inject.internal.Preconditions.checkNotNull;
 public class SimpleBinding<T> implements Binding<T> {
 
     private final Key<T> key;
-    private Provider<T> provider;
+    private final Provider<T> provider;
     private boolean providerInjected;
 
     public SimpleBinding(Key<T> key, Provider<T> provider) {
@@ -25,11 +25,6 @@ public class SimpleBinding<T> implements Binding<T> {
     @Override
     public Provider<T> getProvider() {
         return provider;
-    }
-
-    @Override
-    public void updateProvider(Provider<T> provider) {
-        this.provider = checkNotNull(provider);
     }
 
     @Override

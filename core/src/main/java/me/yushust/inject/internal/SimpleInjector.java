@@ -120,7 +120,6 @@ public class SimpleInjector implements Injector {
         if (!binding.isProviderInjected()) {
             Provider<T> provider = binding.getProvider();
             injectMembers(provider);
-            binding.updateProvider(provider);
             binding.setProviderInjected(true);
             binder.setBinding(binding);
         }

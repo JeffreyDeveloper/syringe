@@ -9,8 +9,6 @@ public interface Binding<T> {
 
     Provider<T> getProvider();
 
-    void updateProvider(Provider<T> provider);
-
     boolean isProviderInjected();
 
     void setProviderInjected(boolean providerInjected);
