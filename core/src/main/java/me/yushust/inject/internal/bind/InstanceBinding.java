@@ -1,7 +1,5 @@
 package me.yushust.inject.internal.bind;
 
-import me.yushust.inject.Inject;
-import me.yushust.inject.Injector;
 import me.yushust.inject.Provider;
 import me.yushust.inject.identity.Key;
 
@@ -19,11 +17,6 @@ public class InstanceBinding<T> extends SimpleBinding<T> {
 
         public InstanceProvider(T instance) {
             this.instance = checkNotNull(instance);
-        }
-
-        @Inject
-        public void injectMembersToInstance(Injector injector) {
-            injector.injectMembers(instance);
         }
 
         @Override
