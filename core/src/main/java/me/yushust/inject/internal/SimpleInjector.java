@@ -33,7 +33,7 @@ public class SimpleInjector implements Injector {
     private SimpleInjector(InternalBinder binder, SimpleInjector prototype) {
         this.binder = binder;
         this.injectableConstructorResolver = prototype.injectableConstructorResolver;
-        this.membersInjectorFactory = prototype.membersInjectorFactory;
+        this.membersInjectorFactory = prototype.membersInjectorFactory.usingInjector(this);
     }
 
     @Override
@@ -107,11 +107,11 @@ public class SimpleInjector implements Injector {
     @Override
     public Injector createChildInjector(Iterable<Module> modules) {
 
-        InternalBinder isolatedLinker = new PrivateInternalBinder(binder);
+        InternalBinder privateBinder = new PrivateInternalBinder(binder);
         for (Module module : modules) {
-            module.configure(isolatedLinker);
+            module.configure(privateBinder);
         }
-        return new SimpleInjector(isolatedLinker, this);
+        return new SimpleInjector(privateBinder, this);
 
     }
 

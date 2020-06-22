@@ -59,4 +59,9 @@ public class SimpleMembersInjectorFactory implements MembersInjectorFactory {
         return new ReflectionConstructorInjector<>(key, injector, constructorMember);
     }
 
+    @Override
+    public MembersInjectorFactory usingInjector(Injector injector) {
+        return new SimpleMembersInjectorFactory(constructorResolver, membersResolver, injector);
+    }
+
 }
