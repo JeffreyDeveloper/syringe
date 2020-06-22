@@ -10,6 +10,8 @@ public interface Injector {
 
     void injectMembers(Object object);
 
+    <T> void injectMembers(Token<T> token, T instance);
+
     <T> T getInstance(Class<T> type);
 
     <T> T getInstance(Token<T> token);

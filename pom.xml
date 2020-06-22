@@ -36,7 +36,7 @@
     </dependencies>
 
     <properties>
-        <core.version>0.1.4</core.version>
+        <core.version>0.2.0</core.version>
     </properties>
 
 </project>

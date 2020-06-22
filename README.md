@@ -95,6 +95,6 @@ mvn clean install
 <dependency>
     <groupId>me.yushust.inject</groupId>
     <artifactId>syringe-core</artifactId>
-    <version>0.1.4</version>
+    <version>0.2.0</version>
 </dependency>
 ```

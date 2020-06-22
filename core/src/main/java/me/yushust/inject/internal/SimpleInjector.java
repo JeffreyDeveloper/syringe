@@ -39,14 +39,18 @@ public class SimpleInjector implements Injector {
     @Override
     public void injectMembers(Object object) {
         checkNotNull(object);
+        injectMembers(new Token<>(object.getClass()), object);
+    }
 
-        Class<?> clazz = object.getClass();
-        Token<?> token = new Token<>(clazz);
-        System.out.println(token.toString());
-        MembersInjector injector = membersInjectorFactory.getMembersInjector(new Token<>(clazz));
+    @Override
+    public <T> void injectMembers(Token<T> token, T instance) {
+        checkNotNull(token);
+        checkNotNull(instance);
+
+        MembersInjector injector = membersInjectorFactory.getMembersInjector(token);
 
         try {
-            injector.injectMembers(object);
+            injector.injectMembers(instance);
         } catch (UnsupportedInjectionException e) {
             e.printStackTrace();
         }
@@ -71,12 +75,13 @@ public class SimpleInjector implements Injector {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public <T> T getInstance(Key<T> key, boolean ignoreExplicitBindings) {
         checkNotNull(key);
+        Token<T> type = key.getType();
 
-        if (key.getType().getRawType() == Injector.class) {
+        if (type.getRawType() == Injector.class) {
             return (T) this;
         }
 
-        if (key.getType().getRawType() == Provider.class) {
+        if (type.getRawType() == Provider.class) {
             Key<?> providerKey = Providers.keyOfProvider((Key) key);
             Provider<?> provider = getProvider(providerKey);
             return (T) provider;
@@ -89,11 +94,11 @@ public class SimpleInjector implements Injector {
             }
         }
 
-        ConstructorInjector<T> constructorInjector = membersInjectorFactory.getConstructorInjector(key.getType());
+        ConstructorInjector<T> constructorInjector = membersInjectorFactory.getConstructorInjector(type);
         T instance = constructorInjector.createInstance();
 
         if (instance != null) {
-            injectMembers(instance);
+            injectMembers(type, instance);
         }
 
         return instance;
@@ -120,7 +125,7 @@ public class SimpleInjector implements Injector {
 
         if (!binding.isProviderInjected()) {
             Provider<T> provider = binding.getProvider();
-            injectMembers(provider);
+            injectMembers(new Token<>(provider.getClass()), provider);
             binding.setProviderInjected(true);
             binder.setBinding(binding);
         }
