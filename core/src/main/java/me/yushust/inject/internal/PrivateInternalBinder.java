@@ -1,7 +1,7 @@
 package me.yushust.inject.internal;
 
 import me.yushust.inject.bind.Binding;
-import me.yushust.inject.exception.InvalidBindingException;
+import me.yushust.inject.exception.ExceptionFactory;
 import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.bind.PrivateBinder;
@@ -30,7 +30,7 @@ public class PrivateInternalBinder extends SimpleBinder implements PrivateBinder
     public <T> void expose(Key<T> key) {
         Binding<T> binding = this.findBinding(key);
         if (binding == null) {
-            throw new InvalidBindingException("The exposing link isn't present!");
+            throw ExceptionFactory.cannotExposeBinding(key, "Key isn't bound");
         }
         removeBinding(key);
         parentBinder.setBinding(binding);

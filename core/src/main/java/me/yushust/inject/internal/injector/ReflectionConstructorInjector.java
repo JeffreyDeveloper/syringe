@@ -1,6 +1,7 @@
 package me.yushust.inject.internal.injector;
 
 import me.yushust.inject.Injector;
+import me.yushust.inject.exception.ExceptionFactory;
 import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.resolve.InjectableMember;
 import me.yushust.inject.resolve.ResolvableKey;
@@ -53,8 +54,10 @@ public class ReflectionConstructorInjector<T> implements ConstructorInjector<T> 
             Object param = injector.getInstance(key.getKey());
 
             if (param == null && !key.isOptional()) {
-                throw new IllegalStateException(
-                        "Cannot inject constructor. Parameter index: " + i + ". Declaring class: " + declaringClass.toString()
+                throw ExceptionFactory.cannotInjectConstructor(
+                        declaringClass,
+                        key.getKey(),
+                        "An instance could not be obtained"
                 );
             }
 
@@ -75,7 +78,7 @@ public class ReflectionConstructorInjector<T> implements ConstructorInjector<T> 
         try {
             return constructor.newInstance(parameters);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException("Failed to create a instance of class " + declaringClass.toString(), e);
+            throw ExceptionFactory.cannotInstantiateClass(declaringClass, e);
         }
 
     }

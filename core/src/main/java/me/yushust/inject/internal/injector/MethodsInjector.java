@@ -1,6 +1,7 @@
 package me.yushust.inject.internal.injector;
 
 import me.yushust.inject.Injector;
+import me.yushust.inject.exception.ExceptionFactory;
 import me.yushust.inject.exception.UnsupportedInjectionException;
 import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.internal.MembersInjector;
@@ -49,10 +50,7 @@ public class MethodsInjector implements MembersInjector {
                 Object injectedValue = injector.getInstance(parameterKey.getKey());
 
                 if (injectedValue == null && !parameterKey.isOptional()) {
-                    throw new UnsupportedInjectionException(
-                        "Cannot create an instance for key " + parameterKey.toString() + " for method " + method.getName() +
-                                " of class " + declaringClass.toString()
-                    );
+                    throw ExceptionFactory.cannotInjectMethod(declaringClass, parameterKey.getKey(), method);
                 }
 
                 parameters[i] = injectedValue;
@@ -61,9 +59,7 @@ public class MethodsInjector implements MembersInjector {
             try {
                 method.invoke(instance, parameters);
             } catch (IllegalAccessException | InvocationTargetException e) {
-                throw new UnsupportedInjectionException(
-                        "Cannot invoke method " + method.getName() + " of class " + declaringClass.toString(), e
-                );
+                throw ExceptionFactory.cannotInvokeInjectableMethod(declaringClass, method, e);
             }
 
         }

@@ -1,6 +1,7 @@
 package me.yushust.inject.internal.injector;
 
 import me.yushust.inject.Injector;
+import me.yushust.inject.exception.ExceptionFactory;
 import me.yushust.inject.exception.UnsupportedInjectionException;
 import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.internal.MembersInjector;
@@ -41,17 +42,13 @@ public class FieldsInjector implements MembersInjector {
             Object injectedValue = injector.getInstance(keyEntry.getKey());
 
             if (injectedValue == null && !keyEntry.isOptional()) {
-                throw new UnsupportedInjectionException(
-                        "Cannot create an instance for key " + keyEntry.getKey().toString() + " of class " + declaringClass.toString()
-                );
+                throw ExceptionFactory.cannotInjectField(declaringClass, keyEntry.getKey(), field);
             }
 
             try {
                 field.set(instance, injectedValue);
             } catch (IllegalAccessException e) {
-                throw new UnsupportedInjectionException(
-                        "Cannot access to field " + field.getName() + " of class " + declaringClass.toString(), e
-                );
+                throw ExceptionFactory.cannotSetFieldValue(declaringClass, field, e);
             }
 
         }

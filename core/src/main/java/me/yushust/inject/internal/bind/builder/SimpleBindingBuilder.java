@@ -3,7 +3,6 @@ package me.yushust.inject.internal.bind.builder;
 import me.yushust.inject.Provider;
 import me.yushust.inject.bind.Binding;
 import me.yushust.inject.bind.BindingBuilder;
-import me.yushust.inject.exception.InvalidBindingException;
 import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.internal.*;
