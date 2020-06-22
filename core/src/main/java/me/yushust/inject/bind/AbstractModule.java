@@ -6,7 +6,7 @@ import static me.yushust.inject.internal.Preconditions.checkState;
 
 public abstract class AbstractModule implements Module {
 
-    private Binder binder;
+    Binder binder;
 
     @Override
     public final void configure(Binder binder) {
