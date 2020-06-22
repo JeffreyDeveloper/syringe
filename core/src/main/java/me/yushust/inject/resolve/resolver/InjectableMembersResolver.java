@@ -1,5 +1,6 @@
 package me.yushust.inject.resolve.resolver;
 
+import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.resolve.InjectableMember;
 
 import java.lang.reflect.Constructor;
@@ -7,10 +8,10 @@ import java.util.Set;
 
 public interface InjectableMembersResolver {
 
-    Set<InjectableMember> resolveInjectableFields(Class<?> token);
+    Set<InjectableMember> resolveInjectableFields(Token<?> token);
 
-    Set<InjectableMember> resolveInjectableMethods(Class<?> token);
+    Set<InjectableMember> resolveInjectableMethods(Token<?> token);
 
-    <T> InjectableMember transformConstructor(Class<T> declaringClass, Constructor<T> constructor);
+    <T> InjectableMember transformConstructor(Token<T> declaringClass, Constructor<T> constructor);
 
 }

@@ -2,6 +2,7 @@ package me.yushust.inject.resolve.resolver;
 
 import me.yushust.inject.Inject;
 import me.yushust.inject.identity.Key;
+import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.resolve.InjectableMember;
 import me.yushust.inject.resolve.OptionalInjectionChecker;
 import me.yushust.inject.resolve.ResolvableKey;
@@ -26,17 +27,17 @@ public class ReflectionInjectableMembersResolver implements InjectableMembersRes
     }
 
     @Override
-    public Set<InjectableMember> resolveInjectableFields(Class<?> type) {
+    public Set<InjectableMember> resolveInjectableFields(Token<?> type) {
         checkNotNull(type);
 
         Set<InjectableMember> members = new HashSet<>();
 
-        for (Field field : type.getDeclaredFields()) {
+        for (Field field : type.getRawType().getDeclaredFields()) {
             if (field.getAnnotation(Inject.class) == null
                 && field.getAnnotation(javax.inject.Inject.class) == null) {
                 continue;
             }
-            Key<?> key = memberKeyResolver.keyOf(field);
+            Key<?> key = memberKeyResolver.keyOf(type, field);
             boolean optional = optionalInjectionChecker.isFieldOptional(field);
             field.setAccessible(true);
             members.add(new InjectableMember(type, field, Collections.singletonList(
@@ -48,34 +49,34 @@ public class ReflectionInjectableMembersResolver implements InjectableMembersRes
     }
 
     @Override
-    public Set<InjectableMember> resolveInjectableMethods(Class<?> type) {
+    public Set<InjectableMember> resolveInjectableMethods(Token<?> type) {
         checkNotNull(type);
         Set<InjectableMember> members = new HashSet<>();
 
-        for (Method method : type.getDeclaredMethods()) {
+        for (Method method : type.getRawType().getDeclaredMethods()) {
             if (method.getAnnotation(Inject.class) == null
                     && method.getAnnotation(javax.inject.Inject.class) == null) {
                 continue;
             }
             method.setAccessible(true);
-            members.add(new InjectableMember(type, method, resolveKeys(method.getParameters())));
+            members.add(new InjectableMember(type, method, resolveKeys(type, method.getParameters())));
         }
 
         return members;
     }
 
     @Override
-    public <T> InjectableMember transformConstructor(Class<T> declaringClass, Constructor<T> constructor) {
+    public <T> InjectableMember transformConstructor(Token<T> declaringClass, Constructor<T> constructor) {
         checkNotNull(declaringClass);
         checkNotNull(constructor);
-        return new InjectableMember(declaringClass, constructor, resolveKeys(constructor.getParameters()));
+        return new InjectableMember(declaringClass, constructor, resolveKeys(declaringClass, constructor.getParameters()));
     }
 
-    private List<ResolvableKey<?>> resolveKeys(Parameter[] parameters) {
+    private List<ResolvableKey<?>> resolveKeys(Token<?> declaringClass, Parameter[] parameters) {
         List<ResolvableKey<?>> keys = new LinkedList<>();
 
         for (Parameter parameter : parameters) {
-            Key<?> key = memberKeyResolver.keyOf(parameter);
+            Key<?> key = memberKeyResolver.keyOf(declaringClass, parameter);
             boolean optional = optionalInjectionChecker.isParameterOptional(parameter);
             keys.add(new ResolvableKey<>(key, optional));
         }

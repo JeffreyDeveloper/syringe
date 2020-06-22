@@ -1,6 +1,7 @@
 package me.yushust.inject.internal;
 
 import me.yushust.inject.Injector;
+import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.internal.injector.ConstructorInjector;
 import me.yushust.inject.internal.injector.FieldsInjector;
 import me.yushust.inject.internal.injector.MethodsInjector;
@@ -29,7 +30,7 @@ public class SimpleMembersInjectorFactory implements MembersInjectorFactory {
     }
 
     @Override
-    public MembersInjector getMembersInjector(Class<?> key) {
+    public MembersInjector getMembersInjector(Token<?> key) {
 
         Set<InjectableMember> fields = membersResolver.resolveInjectableFields(key);
         Set<InjectableMember> methods = membersResolver.resolveInjectableMethods(key);
@@ -42,7 +43,7 @@ public class SimpleMembersInjectorFactory implements MembersInjectorFactory {
     }
 
     @Override
-    public <T> ConstructorInjector<T> getConstructorInjector(Class<T> key) {
+    public <T> ConstructorInjector<T> getConstructorInjector(Token<T> key) {
         InjectableMember constructorMember;
 
         Constructor<T> constructor = constructorResolver.findInjectableConstructor(key);

@@ -2,6 +2,7 @@ package me.yushust.inject.internal;
 
 import me.yushust.inject.Injector;
 import me.yushust.inject.Provider;
+import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.internal.injector.ConstructorInjector;
 import me.yushust.inject.process.ProcessorInterceptor;
 import me.yushust.inject.bind.Binding;
@@ -11,8 +12,6 @@ import me.yushust.inject.bind.Module;
 import me.yushust.inject.resolve.resolver.InjectableConstructorResolver;
 import me.yushust.inject.resolve.resolver.InjectableMembersResolver;
 import me.yushust.inject.util.Providers;
-
-import java.util.Collection;
 
 import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
@@ -38,16 +37,13 @@ public class SimpleInjector implements Injector {
     }
 
     @Override
-    public Collection<Binding<?>> getBindings() {
-        return binder.getBindings();
-    }
-
-    @Override
     public void injectMembers(Object object) {
         checkNotNull(object);
 
         Class<?> clazz = object.getClass();
-        MembersInjector injector = membersInjectorFactory.getMembersInjector(clazz);
+        Token<?> token = new Token<>(clazz);
+        System.out.println(token.toString());
+        MembersInjector injector = membersInjectorFactory.getMembersInjector(new Token<>(clazz));
 
         try {
             injector.injectMembers(object);
@@ -58,7 +54,12 @@ public class SimpleInjector implements Injector {
 
     @Override
     public <T> T getInstance(Class<T> type) {
-        return getInstance(Key.of(type));
+        return getInstance(new Token<>(type));
+    }
+
+    @Override
+    public <T> T getInstance(Token<T> token) {
+        return getInstance(Key.of(token));
     }
 
     @Override
@@ -88,7 +89,7 @@ public class SimpleInjector implements Injector {
             }
         }
 
-        ConstructorInjector<T> constructorInjector = (ConstructorInjector<T>) membersInjectorFactory.getConstructorInjector(key.getType().getRawType());
+        ConstructorInjector<T> constructorInjector = membersInjectorFactory.getConstructorInjector(key.getType());
         T instance = constructorInjector.createInstance();
 
         if (instance != null) {

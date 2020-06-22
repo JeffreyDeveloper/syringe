@@ -1,19 +1,18 @@
 package me.yushust.inject;
 
-import me.yushust.inject.bind.Binding;
 import me.yushust.inject.identity.Key;
 import me.yushust.inject.bind.Module;
+import me.yushust.inject.identity.token.Token;
 
 import java.util.Arrays;
-import java.util.Collection;
 
 public interface Injector {
-
-    Collection<Binding<?>> getBindings();
 
     void injectMembers(Object object);
 
     <T> T getInstance(Class<T> type);
+
+    <T> T getInstance(Token<T> token);
 
     <T> T getInstance(Key<T> key);
 

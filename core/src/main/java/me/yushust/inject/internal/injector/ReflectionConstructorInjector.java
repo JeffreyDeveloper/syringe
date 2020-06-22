@@ -1,6 +1,7 @@
 package me.yushust.inject.internal.injector;
 
 import me.yushust.inject.Injector;
+import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.resolve.InjectableMember;
 import me.yushust.inject.resolve.ResolvableKey;
 
@@ -17,12 +18,12 @@ public class ReflectionConstructorInjector<T> implements ConstructorInjector<T> 
 
     private final Injector injector;
 
-    private final Class<T> declaringClass;
+    private final Token<T> declaringClass;
     private final Constructor<T> constructor;
     private final List<ResolvableKey<?>> parameterKeys;
 
     @SuppressWarnings("unchecked")
-    public ReflectionConstructorInjector(Class<T> declaringClass, Injector injector, InjectableMember constructor) {
+    public ReflectionConstructorInjector(Token<T> declaringClass, Injector injector, InjectableMember constructor) {
         checkNotNull(constructor);
         this.declaringClass = checkNotNull(declaringClass);
         this.injector = checkNotNull(injector);
@@ -30,7 +31,10 @@ public class ReflectionConstructorInjector<T> implements ConstructorInjector<T> 
         Member member = constructor.getMember();
 
         checkArgument(member instanceof Constructor, "Provided injectable member isn't a constructor!");
-        checkState(declaringClass.equals(constructor.getDeclaringClass()), "Constructor isn't declared by the provided class");
+        checkState(
+                declaringClass.equals(constructor.getDeclaringClass()),
+                "Constructor isn't declared by the provided class"
+        );
 
         this.constructor = (Constructor<T>) member;
         this.parameterKeys = constructor.getKeys();
@@ -50,7 +54,7 @@ public class ReflectionConstructorInjector<T> implements ConstructorInjector<T> 
 
             if (param == null && !key.isOptional()) {
                 throw new IllegalStateException(
-                        "Cannot inject constructor. Parameter index: " + i + ". Declaring class: " + declaringClass.getName()
+                        "Cannot inject constructor. Parameter index: " + i + ". Declaring class: " + declaringClass.toString()
                 );
             }
 
@@ -71,7 +75,7 @@ public class ReflectionConstructorInjector<T> implements ConstructorInjector<T> 
         try {
             return constructor.newInstance(parameters);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException("Failed to create a instance of class " + declaringClass.getName(), e);
+            throw new RuntimeException("Failed to create a instance of class " + declaringClass.toString(), e);
         }
 
     }

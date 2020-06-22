@@ -2,6 +2,7 @@ package me.yushust.inject.internal.injector;
 
 import me.yushust.inject.Injector;
 import me.yushust.inject.exception.UnsupportedInjectionException;
+import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.internal.MembersInjector;
 import me.yushust.inject.resolve.InjectableMember;
 import me.yushust.inject.resolve.ResolvableKey;
@@ -17,10 +18,10 @@ import static me.yushust.inject.internal.Preconditions.checkNotNull;
 public class MethodsInjector implements MembersInjector {
 
     private final Injector injector;
-    private final Class<?> declaringClass;
+    private final Token<?> declaringClass;
     private final Set<InjectableMember> injections;
 
-    public MethodsInjector(Injector injector, Class<?> declaringClass, Set<InjectableMember> injections) {
+    public MethodsInjector(Injector injector, Token<?> declaringClass, Set<InjectableMember> injections) {
         this.injector = checkNotNull(injector);
         this.declaringClass = checkNotNull(declaringClass);
         this.injections = checkNotNull(injections);

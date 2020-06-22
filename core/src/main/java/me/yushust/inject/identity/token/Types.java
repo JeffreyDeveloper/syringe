@@ -1,7 +1,10 @@
 package me.yushust.inject.identity.token;
 
 import java.lang.reflect.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Objects;
+
+import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
 public final class Types {
 
@@ -143,6 +146,26 @@ public final class Types {
 
     public static String asString(Type type) {
         return type instanceof Class ? ((Class<?>) type).getName() : type.toString();
+    }
+
+    public static GenericArrayType genericArrayTypeOf(Type type) {
+        checkNotNull(type);
+        return new GenericArrayToken(type);
+    }
+
+    public static ParameterizedType parameterizedTypeOf(Type ownerType, Type rawType, Type... parameterTypes) {
+        checkNotNull(rawType);
+        return new ParameterizedToken(ownerType, rawType, parameterTypes);
+    }
+
+    public static WildcardType wildcardSuperTypeOf(Type type) {
+        checkNotNull(type);
+        return new WildcardToken(new Type[] { Object.class }, new Type[] { type });
+    }
+
+    public static WildcardType wildcardSubTypeOf(Type type) {
+        checkNotNull(type);
+        return new WildcardToken(new Type[] { type }, EMPTY_TYPE_ARRAY);
     }
 
 }

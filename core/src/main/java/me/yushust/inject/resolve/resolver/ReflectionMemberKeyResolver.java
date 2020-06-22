@@ -1,6 +1,7 @@
 package me.yushust.inject.resolve.resolver;
 
 import me.yushust.inject.identity.Key;
+import me.yushust.inject.identity.token.ContextualTypes;
 import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.resolve.AnnotationTypeHandler;
 
@@ -19,16 +20,20 @@ public class ReflectionMemberKeyResolver implements MemberKeyResolver {
     }
 
     @Override
-    public Key<?> keyOf(Field field) {
+    public Key<?> keyOf(Token<?> declaringClass, Field field) {
         checkNotNull(field);
-        Token<?> fieldToken = new Token<>(field.getGenericType());
+        Token<?> fieldToken = new Token<>(
+                ContextualTypes.resolveContextually(declaringClass, field.getGenericType())
+        );
         return getKey(fieldToken, field.getDeclaredAnnotations());
     }
 
     @Override
-    public Key<?> keyOf(Parameter parameter) {
+    public Key<?> keyOf(Token<?> declaringClass, Parameter parameter) {
         checkNotNull(parameter);
-        Token<?> parameterToken = new Token<>(parameter.getParameterizedType());
+        Token<?> parameterToken = new Token<>(
+                ContextualTypes.resolveContextually(declaringClass, parameter.getParameterizedType())
+        );
         return getKey(parameterToken, parameter.getDeclaredAnnotations());
     }
 

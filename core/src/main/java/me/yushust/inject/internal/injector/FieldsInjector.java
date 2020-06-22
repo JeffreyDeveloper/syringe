@@ -2,6 +2,7 @@ package me.yushust.inject.internal.injector;
 
 import me.yushust.inject.Injector;
 import me.yushust.inject.exception.UnsupportedInjectionException;
+import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.internal.MembersInjector;
 import me.yushust.inject.resolve.InjectableMember;
 import me.yushust.inject.resolve.ResolvableKey;
@@ -14,10 +15,10 @@ import static me.yushust.inject.internal.Preconditions.*;
 public class FieldsInjector implements MembersInjector {
 
     private final Injector injector;
-    private final Class<?> declaringClass;
+    private final Token<?> declaringClass;
     private final Set<InjectableMember> injections;
 
-    public FieldsInjector(Injector injector, Class<?> declaringClass, Set<InjectableMember> injectableMembers) {
+    public FieldsInjector(Injector injector, Token<?> declaringClass, Set<InjectableMember> injectableMembers) {
         this.injector = checkNotNull(injector);
         this.declaringClass = checkNotNull(declaringClass);
         this.injections = checkNotNull(injectableMembers);
@@ -28,7 +29,7 @@ public class FieldsInjector implements MembersInjector {
 
         checkNotNull(instance);
         checkState(
-                instance.getClass() == declaringClass,
+                instance.getClass() == declaringClass.getRawType(),
                 "Provided value isn't compatible with specified declaring class"
         );
 
