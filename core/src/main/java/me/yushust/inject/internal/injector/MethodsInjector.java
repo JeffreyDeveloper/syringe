@@ -50,6 +50,7 @@ public class MethodsInjector implements MembersInjector {
                 ResolvableKey<?> parameterKey = parameterKeys.get(i);
 
                 if (injectionStack.contains(member)) {
+                    injectionStack.push(member);
                     throw ExceptionFactory.cyclicInjectionDetected(injectionStack);
                 }
 

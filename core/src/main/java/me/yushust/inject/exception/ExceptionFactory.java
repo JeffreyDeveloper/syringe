@@ -55,10 +55,11 @@ public final class ExceptionFactory {
 
     public static InjectionException cyclicInjectionDetected(Stack<Member> stack) {
         StringBuilder cycle = new StringBuilder();
-        for (Member member : stack) {
-            cycle.append(member.getDeclaringClass().getName()).append(" -> ");
-        }
         cycle.append(stack.firstElement().getDeclaringClass().getName());
+        stack.remove(0);
+        for (Member member : stack) {
+            cycle.append(" -> ").append(member.getDeclaringClass().getName());
+        }
         return new InjectionException(
                 "Cyclic dependency detected! " + cycle.toString()
         );

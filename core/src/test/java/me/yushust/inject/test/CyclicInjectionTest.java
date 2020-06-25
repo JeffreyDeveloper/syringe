@@ -33,8 +33,14 @@ public class CyclicInjectionTest {
 
     public static class Bar {
 
-        @Inject private Foo foo;
+        @Inject private Z z;
 
     }
 
+
+    public static class Z {
+
+        @Inject private Bar bar;
+
+    }
 }

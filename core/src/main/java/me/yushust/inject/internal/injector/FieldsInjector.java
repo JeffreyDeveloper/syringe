@@ -42,6 +42,7 @@ public class FieldsInjector implements MembersInjector {
 
             Field field = (Field) injection.getMember();
             if (injectionStack.contains(field)) {
+                injectionStack.push(field);
                 throw ExceptionFactory.cyclicInjectionDetected(injectionStack);
             }
 
