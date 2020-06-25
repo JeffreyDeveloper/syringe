@@ -21,7 +21,6 @@ injector.injectMembers(foo);
 
 ### Create a module
 Creating a module is as simple as creating a class that extends `Module` and override `configure` method
-`Linker` is like [Guice](https://github.com/google/guice)'s `Binder`
 The way to configure links is very similar to the way to configure bindings in  [Guice](https://github.com/google/guice)
 ```java
 import me.yushust.inject.bind.Module;
