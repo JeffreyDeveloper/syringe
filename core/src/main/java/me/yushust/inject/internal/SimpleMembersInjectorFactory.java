@@ -20,10 +20,10 @@ public class SimpleMembersInjectorFactory implements MembersInjectorFactory {
 
     private final InjectableConstructorResolver constructorResolver;
     private final InjectableMembersResolver membersResolver;
-    private final Injector injector;
+    private final InternalInjector injector;
 
     public SimpleMembersInjectorFactory(InjectableConstructorResolver constructorResolver,
-                                        InjectableMembersResolver membersResolver, Injector injector) {
+                                        InjectableMembersResolver membersResolver, InternalInjector injector) {
         this.constructorResolver = checkNotNull(constructorResolver);
         this.membersResolver = checkNotNull(membersResolver);
         this.injector = checkNotNull(injector);
@@ -60,7 +60,7 @@ public class SimpleMembersInjectorFactory implements MembersInjectorFactory {
     }
 
     @Override
-    public MembersInjectorFactory usingInjector(Injector injector) {
+    public MembersInjectorFactory usingInjector(InternalInjector injector) {
         return new SimpleMembersInjectorFactory(constructorResolver, membersResolver, injector);
     }
 

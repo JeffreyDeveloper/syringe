@@ -13,9 +13,12 @@ import me.yushust.inject.resolve.resolver.InjectableConstructorResolver;
 import me.yushust.inject.resolve.resolver.InjectableMembersResolver;
 import me.yushust.inject.util.Providers;
 
+import java.lang.reflect.Member;
+import java.util.Stack;
+
 import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
-public class SimpleInjector implements Injector {
+public class SimpleInjector implements InternalInjector {
 
     private final InternalBinder binder;
     private final InjectableConstructorResolver injectableConstructorResolver;
@@ -42,15 +45,21 @@ public class SimpleInjector implements Injector {
         injectMembers(new Token<>(object.getClass()), object);
     }
 
+
     @Override
     public <T> void injectMembers(Token<T> token, T instance) {
+        injectMembers(token, instance, new Stack<>());
+    }
+
+    @Override
+    public <T> void injectMembers(Token<T> token, T instance, Stack<Member> injectionStack) {
         checkNotNull(token);
         checkNotNull(instance);
 
         MembersInjector injector = membersInjectorFactory.getMembersInjector(token);
 
         try {
-            injector.injectMembers(instance);
+            injector.injectMembers(instance, injectionStack);
         } catch (UnsupportedInjectionException e) {
             e.printStackTrace();
         }
@@ -72,8 +81,13 @@ public class SimpleInjector implements Injector {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "rawtypes"})
     public <T> T getInstance(Key<T> key, boolean ignoreExplicitBindings) {
+        return getInstance(key, ignoreExplicitBindings, new Stack<>());
+    }
+
+    @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public <T> T getInstance(Key<T> key, boolean ignoreExplicitBindings, Stack<Member> injectionStack) {
         checkNotNull(key);
         Token<T> type = key.getType();
 
@@ -98,7 +112,7 @@ public class SimpleInjector implements Injector {
         T instance = constructorInjector.createInstance();
 
         if (instance != null) {
-            injectMembers(type, instance);
+            injectMembers(type, instance, injectionStack);
         }
 
         return instance;
