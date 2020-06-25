@@ -4,7 +4,9 @@ import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.Token;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.util.Stack;
 
 public final class ExceptionFactory {
 
@@ -48,6 +50,18 @@ public final class ExceptionFactory {
                 "Cannot set field value of class " + declaringClass.toString() + " class." +
                         "Field: " + field.getName(),
                 cause
+        );
+    }
+
+    public static InjectionException cyclicInjectionDetected(Stack<Member> stack) {
+        StringBuilder cycle = new StringBuilder();
+        cycle.append(stack.firstElement().getDeclaringClass().getName());
+        stack.remove(0);
+        for (Member member : stack) {
+            cycle.append(" -> ").append(member.getDeclaringClass().getName());
+        }
+        return new InjectionException(
+                "Cyclic dependency detected! " + cycle.toString()
         );
     }
 

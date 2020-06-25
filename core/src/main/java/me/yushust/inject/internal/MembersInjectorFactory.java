@@ -10,6 +10,6 @@ public interface MembersInjectorFactory {
 
     <T> ConstructorInjector<T> getConstructorInjector(Token<T> key);
 
-    MembersInjectorFactory usingInjector(Injector injector);
+    MembersInjectorFactory usingInjector(InternalInjector injector);
 
 }
