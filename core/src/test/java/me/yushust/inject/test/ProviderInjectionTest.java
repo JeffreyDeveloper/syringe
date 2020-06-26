@@ -4,9 +4,9 @@ import me.yushust.inject.Inject;
 import me.yushust.inject.Injector;
 import me.yushust.inject.InjectorFactory;
 import me.yushust.inject.Provider;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ProviderInjectionTest {
 

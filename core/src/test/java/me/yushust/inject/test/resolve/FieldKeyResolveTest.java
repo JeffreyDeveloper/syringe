@@ -5,13 +5,13 @@ import me.yushust.inject.identity.token.Token;
 import me.yushust.inject.resolve.AnnotationTypeHandler;
 import me.yushust.inject.resolve.resolver.MemberKeyResolver;
 import me.yushust.inject.resolve.resolver.ReflectionMemberKeyResolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FieldKeyResolveTest {
 

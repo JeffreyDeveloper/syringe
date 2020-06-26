@@ -4,9 +4,9 @@ import me.yushust.inject.Inject;
 import me.yushust.inject.Injector;
 import me.yushust.inject.InjectorFactory;
 import me.yushust.inject.exception.InjectionException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CyclicInjectionTest {
 
@@ -16,7 +16,6 @@ public class CyclicInjectionTest {
         Foo foo = new Foo();
 
         Injector injector = InjectorFactory.create();
-
 
         try {
             injector.injectMembers(foo);
