@@ -23,7 +23,7 @@ public class AnnotationOptionalInjectionChecker implements OptionalInjectionChec
 
         Inject inject = field.getAnnotation(Inject.class);
 
-        if (inject.optional()) {
+        if (inject != null && inject.optional()) {
             return true;
         }
 
