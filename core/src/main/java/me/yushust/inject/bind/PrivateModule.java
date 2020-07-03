@@ -1,7 +1,7 @@
 package me.yushust.inject.bind;
 
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.TypeReference;
+import me.yushust.inject.identity.type.TypeReference;
 
 import static me.yushust.inject.internal.Preconditions.checkState;
 

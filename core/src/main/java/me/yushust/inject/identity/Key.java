@@ -1,7 +1,7 @@
 package me.yushust.inject.identity;
 
-import me.yushust.inject.identity.token.TypeReference;
-import me.yushust.inject.identity.token.Types;
+import me.yushust.inject.identity.type.TypeReference;
+import me.yushust.inject.identity.type.Types;
 import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
 import java.lang.annotation.Annotation;

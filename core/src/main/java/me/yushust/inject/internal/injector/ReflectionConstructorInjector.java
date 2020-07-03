@@ -2,7 +2,7 @@ package me.yushust.inject.internal.injector;
 
 import me.yushust.inject.Injector;
 import me.yushust.inject.exception.ExceptionFactory;
-import me.yushust.inject.identity.token.TypeReference;
+import me.yushust.inject.identity.type.TypeReference;
 import me.yushust.inject.resolve.InjectableMember;
 import me.yushust.inject.resolve.ResolvableKey;
 

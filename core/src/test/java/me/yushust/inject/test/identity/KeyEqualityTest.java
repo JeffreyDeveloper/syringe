@@ -1,7 +1,7 @@
 package me.yushust.inject.test.identity;
 
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.TypeReference;
+import me.yushust.inject.identity.type.TypeReference;
 import me.yushust.inject.name.Named;
 import me.yushust.inject.name.Names;
 import org.junit.jupiter.api.Test;

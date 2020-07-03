@@ -1,7 +1,7 @@
-package me.yushust.inject.identity.token.resolve;
+package me.yushust.inject.identity.type.resolve;
 
-import me.yushust.inject.identity.token.ContextualTypes;
-import me.yushust.inject.identity.token.TypeReference;
+import me.yushust.inject.identity.type.ContextualTypes;
+import me.yushust.inject.identity.type.TypeReference;
 
 import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.ParameterizedType;

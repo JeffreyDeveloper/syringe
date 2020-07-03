@@ -1,7 +1,7 @@
 package me.yushust.inject.test.resolve;
 
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.TypeReference;
+import me.yushust.inject.identity.type.TypeReference;
 import me.yushust.inject.resolve.AnnotationTypeHandler;
 import me.yushust.inject.resolve.resolver.MemberKeyResolver;
 import me.yushust.inject.resolve.resolver.ReflectionMemberKeyResolver;

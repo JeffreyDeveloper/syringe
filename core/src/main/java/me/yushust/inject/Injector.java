@@ -2,7 +2,7 @@ package me.yushust.inject;
 
 import me.yushust.inject.identity.Key;
 import me.yushust.inject.bind.Module;
-import me.yushust.inject.identity.token.TypeReference;
+import me.yushust.inject.identity.type.TypeReference;
 
 import java.util.Arrays;
 

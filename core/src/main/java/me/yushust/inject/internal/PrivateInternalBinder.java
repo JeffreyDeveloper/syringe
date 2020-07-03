@@ -3,7 +3,7 @@ package me.yushust.inject.internal;
 import me.yushust.inject.bind.Binding;
 import me.yushust.inject.exception.ExceptionFactory;
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.TypeReference;
+import me.yushust.inject.identity.type.TypeReference;
 import me.yushust.inject.bind.PrivateBinder;
 
 import static me.yushust.inject.internal.Preconditions.checkNotNull;

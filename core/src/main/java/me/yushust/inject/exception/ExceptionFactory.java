@@ -1,7 +1,7 @@
 package me.yushust.inject.exception;
 
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.TypeReference;
+import me.yushust.inject.identity.type.TypeReference;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;

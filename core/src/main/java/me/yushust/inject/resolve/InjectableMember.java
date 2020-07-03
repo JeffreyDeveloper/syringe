@@ -1,6 +1,6 @@
 package me.yushust.inject.resolve;
 
-import me.yushust.inject.identity.token.TypeReference;
+import me.yushust.inject.identity.type.TypeReference;
 
 import java.lang.reflect.Member;
 import java.util.List;

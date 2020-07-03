@@ -1,6 +1,6 @@
 package me.yushust.inject.internal;
 
-import me.yushust.inject.identity.token.TypeReference;
+import me.yushust.inject.identity.type.TypeReference;
 import me.yushust.inject.internal.injector.ConstructorInjector;
 import me.yushust.inject.internal.injector.FieldsInjector;
 import me.yushust.inject.internal.injector.MethodsInjector;

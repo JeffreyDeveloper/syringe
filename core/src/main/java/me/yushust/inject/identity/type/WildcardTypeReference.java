@@ -1,4 +1,4 @@
-package me.yushust.inject.identity.token;
+package me.yushust.inject.identity.type;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;

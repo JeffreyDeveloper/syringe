@@ -1,6 +1,6 @@
-package me.yushust.inject.identity.token.resolve;
+package me.yushust.inject.identity.type.resolve;
 
-import me.yushust.inject.identity.token.TypeReference;
+import me.yushust.inject.identity.type.TypeReference;
 
 import java.lang.reflect.Type;
 

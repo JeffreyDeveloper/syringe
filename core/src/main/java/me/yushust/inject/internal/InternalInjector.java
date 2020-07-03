@@ -2,7 +2,7 @@ package me.yushust.inject.internal;
 
 import me.yushust.inject.Injector;
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.TypeReference;
+import me.yushust.inject.identity.type.TypeReference;
 
 import java.lang.reflect.Member;
 import java.util.Stack;

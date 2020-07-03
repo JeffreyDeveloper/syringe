@@ -1,6 +1,6 @@
-package me.yushust.inject.identity.token;
+package me.yushust.inject.identity.type;
 
-import me.yushust.inject.identity.token.resolve.*;
+import me.yushust.inject.identity.type.resolve.*;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.GenericArrayType;

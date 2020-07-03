@@ -2,7 +2,7 @@ package me.yushust.inject.internal;
 
 import me.yushust.inject.Injector;
 import me.yushust.inject.Provider;
-import me.yushust.inject.identity.token.TypeReference;
+import me.yushust.inject.identity.type.TypeReference;
 import me.yushust.inject.internal.injector.ConstructorInjector;
 import me.yushust.inject.process.ProcessorInterceptor;
 import me.yushust.inject.bind.Binding;

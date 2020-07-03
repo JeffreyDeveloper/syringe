@@ -3,7 +3,7 @@ package me.yushust.inject.internal;
 import me.yushust.inject.bind.Binding;
 import me.yushust.inject.bind.BindingBuilder;
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.TypeReference;
+import me.yushust.inject.identity.type.TypeReference;
 import me.yushust.inject.internal.bind.builder.SimpleBindingBuilder;
 
 import java.util.Collection;

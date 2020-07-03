@@ -2,7 +2,7 @@ package me.yushust.inject.resolve.resolver;
 
 import me.yushust.inject.Inject;
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.TypeReference;
+import me.yushust.inject.identity.type.TypeReference;
 import me.yushust.inject.resolve.InjectableMember;
 import me.yushust.inject.resolve.OptionalInjectionChecker;
 import me.yushust.inject.resolve.ResolvableKey;
