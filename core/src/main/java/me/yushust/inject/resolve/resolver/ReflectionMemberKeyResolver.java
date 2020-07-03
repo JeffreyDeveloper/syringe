@@ -2,7 +2,7 @@ package me.yushust.inject.resolve.resolver;
 
 import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.token.ContextualTypes;
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 import me.yushust.inject.resolve.AnnotationTypeHandler;
 
 import java.lang.annotation.Annotation;
@@ -20,33 +20,33 @@ public class ReflectionMemberKeyResolver implements MemberKeyResolver {
     }
 
     @Override
-    public Key<?> keyOf(Token<?> declaringClass, Field field) {
+    public Key<?> keyOf(TypeReference<?> declaringClass, Field field) {
         checkNotNull(field);
-        Token<?> fieldToken = new Token<>(
+        TypeReference<?> fieldTypeReference = TypeReference.of(
                 ContextualTypes.resolveContextually(declaringClass, field.getGenericType())
         );
-        return getKey(fieldToken, field.getDeclaredAnnotations());
+        return getKey(fieldTypeReference, field.getDeclaredAnnotations());
     }
 
     @Override
-    public Key<?> keyOf(Token<?> declaringClass, Parameter parameter) {
+    public Key<?> keyOf(TypeReference<?> declaringClass, Parameter parameter) {
         checkNotNull(parameter);
-        Token<?> parameterToken = new Token<>(
+        TypeReference<?> parameterTypeReference = TypeReference.of(
                 ContextualTypes.resolveContextually(declaringClass, parameter.getParameterizedType())
         );
-        return getKey(parameterToken, parameter.getDeclaredAnnotations());
+        return getKey(parameterTypeReference, parameter.getDeclaredAnnotations());
     }
 
-    private Key<?> getKey(Token<?> token, Annotation[] declaredAnnotations) {
+    private Key<?> getKey(TypeReference<?> typeReference, Annotation[] declaredAnnotations) {
         for (Annotation annotation : declaredAnnotations) {
             if (annotationTypeHandler.isQualifier(annotation)) {
                 if (annotationTypeHandler.isMarkerAnnotation(annotation)) {
-                    return Key.of(token, annotation.annotationType(), null);
+                    return Key.of(typeReference, annotation.annotationType(), null);
                 }
-                return Key.of(token, annotation);
+                return Key.of(typeReference, annotation);
             }
         }
-        return Key.of(token);
+        return Key.of(typeReference);
     }
 
 }

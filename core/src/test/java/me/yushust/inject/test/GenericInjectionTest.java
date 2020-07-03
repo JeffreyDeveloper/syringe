@@ -3,7 +3,7 @@ package me.yushust.inject.test;
 import me.yushust.inject.Inject;
 import me.yushust.inject.Injector;
 import me.yushust.inject.InjectorFactory;
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,10 +14,10 @@ public class GenericInjectionTest {
     public void injectGenerics() {
 
         Injector injector = InjectorFactory.create(binder -> {
-            binder.bind(new Token<Bar<String>>() {}).toInstance(new Bar<>("123"));
+            binder.bind(new TypeReference<Bar<String>>() {}).toInstance(new Bar<>("123"));
         });
 
-        Foo<String> foo = injector.getInstance(new Token<Foo<String>>() {});
+        Foo<String> foo = injector.getInstance(new TypeReference<Foo<String>>() {});
         assertEquals(foo.bar.value, "123");
 
     }

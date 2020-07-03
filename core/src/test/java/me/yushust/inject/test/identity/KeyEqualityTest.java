@@ -1,7 +1,7 @@
 package me.yushust.inject.test.identity;
 
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 import me.yushust.inject.name.Named;
 import me.yushust.inject.name.Names;
 import org.junit.jupiter.api.Test;
@@ -17,10 +17,10 @@ public class KeyEqualityTest {
     @Test
     public void compare() {
 
-        Token<ArrayList<?>> arrayListToken = new Token<ArrayList<?>>() {};
-        Token<? extends List<?>> listToken = new Token<ArrayList<?>>() {};
+        TypeReference<ArrayList<?>> arrayListTypeReference = new TypeReference<ArrayList<?>>() {};
+        TypeReference<? extends List<?>> listTypeReference = new TypeReference<ArrayList<?>>() {};
 
-        assertEquals(arrayListToken, listToken);
+        assertEquals(arrayListTypeReference, listTypeReference);
 
         Key<ArrayList<?>> arrayListKey = new Key<ArrayList<?>>() {};
         Key<List<?>> listKey = new Key<List<?>>() {};

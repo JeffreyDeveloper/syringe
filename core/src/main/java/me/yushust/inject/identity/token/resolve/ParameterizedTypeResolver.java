@@ -1,7 +1,7 @@
 package me.yushust.inject.identity.token.resolve;
 
 import me.yushust.inject.identity.token.ContextualTypes;
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 import me.yushust.inject.identity.token.Types;
 
 import java.lang.reflect.ParameterizedType;
@@ -12,7 +12,7 @@ import static me.yushust.inject.internal.Preconditions.checkState;
 public class ParameterizedTypeResolver implements TypeResolver {
 
     @Override
-    public Type resolveType(Token<?> context, Type type) {
+    public Type resolveType(TypeReference<?> context, Type type) {
 
         checkState(type instanceof ParameterizedType, "Type isn't instance of ParameterizedType!");
 

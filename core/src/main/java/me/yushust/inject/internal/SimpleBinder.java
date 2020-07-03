@@ -3,7 +3,7 @@ package me.yushust.inject.internal;
 import me.yushust.inject.bind.Binding;
 import me.yushust.inject.bind.BindingBuilder;
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 import me.yushust.inject.internal.bind.builder.SimpleBindingBuilder;
 
 import java.util.Collection;
@@ -20,13 +20,13 @@ public class SimpleBinder implements InternalBinder {
     @Override
     public <T> BindingBuilder.Qualified<T> bind(Class<T> type) {
         checkNotNull(type);
-        return bind(new Token<>(type));
+        return bind(TypeReference.of(type));
     }
 
     @Override
-    public <T> BindingBuilder.Qualified<T> bind(Token<T> token) {
-        checkNotNull(token);
-        return new SimpleBindingBuilder<>(this, token);
+    public <T> BindingBuilder.Qualified<T> bind(TypeReference<T> typeReference) {
+        checkNotNull(typeReference);
+        return new SimpleBindingBuilder<>(this, typeReference);
     }
 
     @Override

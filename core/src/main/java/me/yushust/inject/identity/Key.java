@@ -1,6 +1,6 @@
 package me.yushust.inject.identity;
 
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 import me.yushust.inject.identity.token.Types;
 import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
@@ -9,9 +9,9 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
-public class Key<T> {
+public abstract class Key<T> {
 
-    private final Token<T> type;
+    private final TypeReference<T> type;
     private final Class<? extends Annotation> qualifierType;
     private final Annotation qualifier;
 
@@ -25,7 +25,7 @@ public class Key<T> {
 
         ParameterizedType parameterized = (ParameterizedType) superClass;
 
-        this.type = new Token<>(parameterized.getActualTypeArguments()[0]);
+        this.type = TypeReference.of(parameterized.getActualTypeArguments()[0]);
 
         if (qualifier != null && qualifierType == null) {
             this.qualifierType = qualifier.annotationType();
@@ -41,13 +41,13 @@ public class Key<T> {
         this(null, null);
     }
 
-    private Key(Token<T> token, Class<? extends Annotation> qualifierType, Annotation qualifier) {
-        this.type = checkNotNull(token);
+    private Key(TypeReference<T> typeReference, Class<? extends Annotation> qualifierType, Annotation qualifier) {
+        this.type = checkNotNull(typeReference);
         this.qualifierType = qualifierType;
         this.qualifier = qualifier;
     }
 
-    public final Token<T> getType() {
+    public final TypeReference<T> getType() {
         return type;
     }
 
@@ -89,19 +89,19 @@ public class Key<T> {
     }
 
     public static <T> Key<T> of(Class<T> type, Class<? extends Annotation> qualifierType, Annotation qualifier) {
-        return of(new Token<>(type), qualifierType, qualifier);
+        return of(TypeReference.of(type), qualifierType, qualifier);
     }
 
-    public static <T> Key<T> of(Token<T> type) {
+    public static <T> Key<T> of(TypeReference<T> type) {
         return of(type, null, null);
     }
 
-    public static <T> Key<T> of(Token<T> type, Annotation annotation) {
+    public static <T> Key<T> of(TypeReference<T> type, Annotation annotation) {
         return of(type, annotation.annotationType(), annotation);
     }
 
-    public static <T> Key<T> of(Token<T> type, Class<? extends Annotation> qualifierType, Annotation qualifier) {
-        return new Key<>(type, qualifierType, qualifier);
+    public static <T> Key<T> of(TypeReference<T> type, Class<? extends Annotation> qualifierType, Annotation qualifier) {
+        return new Key<T>(type, qualifierType, qualifier) {};
     }
 
 }

@@ -19,7 +19,7 @@ public final class Types {
         if (type instanceof Class) {
             Class<?> clazz = (Class<?>) type;
             if (clazz.isArray()) {
-                return new GenericArrayToken(
+                return new GenericArrayTypeReference(
                         wrap(clazz.getComponentType())
                 );
             }
@@ -28,17 +28,17 @@ public final class Types {
 
         if (type instanceof ParameterizedType) {
             ParameterizedType prototype = (ParameterizedType) type;
-            return new ParameterizedToken(prototype);
+            return new ParameterizedTypeReference(prototype);
         }
 
         if (type instanceof GenericArrayType) {
             GenericArrayType prototype = (GenericArrayType) type;
-            return new GenericArrayToken(prototype);
+            return new GenericArrayTypeReference(prototype);
         }
 
         if (type instanceof WildcardType) {
             WildcardType prototype = (WildcardType) type;
-            return new WildcardToken(prototype);
+            return new WildcardTypeReference(prototype);
         }
 
         return type;
@@ -150,22 +150,22 @@ public final class Types {
 
     public static GenericArrayType genericArrayTypeOf(Type type) {
         checkNotNull(type);
-        return new GenericArrayToken(type);
+        return new GenericArrayTypeReference(type);
     }
 
     public static ParameterizedType parameterizedTypeOf(Type ownerType, Type rawType, Type... parameterTypes) {
         checkNotNull(rawType);
-        return new ParameterizedToken(ownerType, rawType, parameterTypes);
+        return new ParameterizedTypeReference(ownerType, rawType, parameterTypes);
     }
 
     public static WildcardType wildcardSuperTypeOf(Type type) {
         checkNotNull(type);
-        return new WildcardToken(new Type[] { Object.class }, new Type[] { type });
+        return new WildcardTypeReference(new Type[] { Object.class }, new Type[] { type });
     }
 
     public static WildcardType wildcardSubTypeOf(Type type) {
         checkNotNull(type);
-        return new WildcardToken(new Type[] { type }, EMPTY_TYPE_ARRAY);
+        return new WildcardTypeReference(new Type[] { type }, EMPTY_TYPE_ARRAY);
     }
 
 }

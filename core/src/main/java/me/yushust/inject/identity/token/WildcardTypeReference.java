@@ -3,16 +3,16 @@ package me.yushust.inject.identity.token;
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
 
-class WildcardToken implements WildcardType {
+class WildcardTypeReference implements WildcardType {
 
     private final Type upperBound;
     private final Type lowerBound;
 
-    WildcardToken(WildcardType prototype) {
+    WildcardTypeReference(WildcardType prototype) {
         this(prototype.getUpperBounds(), prototype.getLowerBounds());
     }
 
-    WildcardToken(Type[] upperBounds, Type[] lowerBounds) {
+    WildcardTypeReference(Type[] upperBounds, Type[] lowerBounds) {
 
         if (lowerBounds.length == 1) {
             this.lowerBound = Types.wrap(lowerBounds[0]);

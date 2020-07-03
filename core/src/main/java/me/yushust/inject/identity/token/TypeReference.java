@@ -5,13 +5,13 @@ import me.yushust.inject.internal.Preconditions;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-public class Token<T> {
+public abstract class TypeReference<T> {
 
     private final Class<? super T> rawType;
     private final Type type;
 
     @SuppressWarnings("unchecked")
-    protected Token() {
+    protected TypeReference() {
 
         Type superClass = getClass().getGenericSuperclass();
 
@@ -26,7 +26,7 @@ public class Token<T> {
     }
 
     @SuppressWarnings("unchecked")
-    public Token(Type type) {
+    public TypeReference(Type type) {
         Preconditions.checkNotNull(type);
         this.type = Types.wrap(type);
         this.rawType = (Class<? super T>) Types.getRawType(this.type);
@@ -50,11 +50,11 @@ public class Token<T> {
         if (o == this) {
             return true;
         }
-        if (!(o instanceof Token<?>)) {
+        if (!(o instanceof TypeReference<?>)) {
             return false;
         }
 
-        Token<?> other = (Token<?>) o;
+        TypeReference<?> other = (TypeReference<?>) o;
         return Types.typeEquals(type, other.type);
     }
 
@@ -63,9 +63,13 @@ public class Token<T> {
         return Types.asString(type);
     }
 
-    public static Token<?> of(Type rawType, Type... typeArguments) {
+    public static <T> TypeReference<T> of(Type type) {
+        return new TypeReference<T>(type) {};
+    }
+
+    public static TypeReference<?> of(Type rawType, Type... typeArguments) {
         Preconditions.checkNotNull(rawType);
-        return new Token<>(new ParameterizedToken(null, rawType, typeArguments));
+        return of(new ParameterizedTypeReference(null, rawType, typeArguments));
     }
 
 }

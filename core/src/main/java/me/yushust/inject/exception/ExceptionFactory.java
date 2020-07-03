@@ -1,7 +1,7 @@
 package me.yushust.inject.exception;
 
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -14,7 +14,7 @@ public final class ExceptionFactory {
         throw new UnsupportedOperationException("This class couldn't be instantiated!");
     }
 
-    public static InjectionException cannotInjectConstructor(Token<?> declaringClass, Key<?> injectingKey, String cause) {
+    public static InjectionException cannotInjectConstructor(TypeReference<?> declaringClass, Key<?> injectingKey, String cause) {
         return new InjectionException(
                 "Cannot inject dependencies into constructor of " + declaringClass.toString() +" class." +
                         " Cause: " + cause +
@@ -22,14 +22,14 @@ public final class ExceptionFactory {
         );
     }
 
-    public static InjectionException cannotInstantiateClass(Token<?> clazz, Throwable cause) {
+    public static InjectionException cannotInstantiateClass(TypeReference<?> clazz, Throwable cause) {
         return new InjectionException(
                 "Cannot instantiate class " + clazz.toString(),
                 cause
         );
     }
 
-    public static UnsupportedInjectionException cannotInjectMethod(Token<?> declaringClass, Key<?> injectingKey, Method method) {
+    public static UnsupportedInjectionException cannotInjectMethod(TypeReference<?> declaringClass, Key<?> injectingKey, Method method) {
         return new UnsupportedInjectionException(
                 "Cannot inject dependencies into method of " + declaringClass.toString() + " class." +
                         " Key: " + injectingKey.toString() +
@@ -37,7 +37,7 @@ public final class ExceptionFactory {
         );
     }
 
-    public static InjectionException cannotInvokeInjectableMethod(Token<?> declaringClass, Method method, Throwable cause) {
+    public static InjectionException cannotInvokeInjectableMethod(TypeReference<?> declaringClass, Method method, Throwable cause) {
         return new InjectionException(
                 "Cannot invoke injectable method of class " + declaringClass.toString() + " class." +
                         " Method: " + method.getName(),
@@ -45,7 +45,7 @@ public final class ExceptionFactory {
         );
     }
 
-    public static InjectionException cannotSetFieldValue(Token<?> declaringClass, Field field, Throwable cause) {
+    public static InjectionException cannotSetFieldValue(TypeReference<?> declaringClass, Field field, Throwable cause) {
         return new InjectionException(
                 "Cannot set field value of class " + declaringClass.toString() + " class." +
                         "Field: " + field.getName(),
@@ -65,7 +65,7 @@ public final class ExceptionFactory {
         );
     }
 
-    public static UnsupportedInjectionException cannotInjectField(Token<?> declaringClass, Key<?> injectingKey, Field field) {
+    public static UnsupportedInjectionException cannotInjectField(TypeReference<?> declaringClass, Key<?> injectingKey, Field field) {
         return new UnsupportedInjectionException(
                 "Cannot inject dependencies into field of " + declaringClass.toString() + " class." +
                         " Key: " + injectingKey.toString() +

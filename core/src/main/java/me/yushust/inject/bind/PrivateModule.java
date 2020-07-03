@@ -1,7 +1,7 @@
 package me.yushust.inject.bind;
 
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 
 import static me.yushust.inject.internal.Preconditions.checkState;
 
@@ -21,8 +21,8 @@ public abstract class PrivateModule extends AbstractModule {
         getPrivateBinder().expose(key);
     }
 
-    public final void expose(Token<?> token) {
-        getPrivateBinder().expose(token);
+    public final void expose(TypeReference<?> typeReference) {
+        getPrivateBinder().expose(typeReference);
     }
 
 }

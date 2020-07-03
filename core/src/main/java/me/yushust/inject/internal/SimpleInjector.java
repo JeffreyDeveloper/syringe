@@ -2,7 +2,7 @@ package me.yushust.inject.internal;
 
 import me.yushust.inject.Injector;
 import me.yushust.inject.Provider;
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 import me.yushust.inject.internal.injector.ConstructorInjector;
 import me.yushust.inject.process.ProcessorInterceptor;
 import me.yushust.inject.bind.Binding;
@@ -42,21 +42,21 @@ public class SimpleInjector implements InternalInjector {
     @Override
     public void injectMembers(Object object) {
         checkNotNull(object);
-        injectMembers(new Token<>(object.getClass()), object);
+        injectMembers(TypeReference.of(object.getClass()), object);
     }
 
 
     @Override
-    public <T> void injectMembers(Token<T> token, T instance) {
-        injectMembers(token, instance, new Stack<>());
+    public <T> void injectMembers(TypeReference<T> typeReference, T instance) {
+        injectMembers(typeReference, instance, new Stack<>());
     }
 
     @Override
-    public <T> void injectMembers(Token<T> token, T instance, Stack<Member> injectionStack) {
-        checkNotNull(token);
+    public <T> void injectMembers(TypeReference<T> typeReference, T instance, Stack<Member> injectionStack) {
+        checkNotNull(typeReference);
         checkNotNull(instance);
 
-        MembersInjector injector = membersInjectorFactory.getMembersInjector(token);
+        MembersInjector injector = membersInjectorFactory.getMembersInjector(typeReference);
 
         try {
             injector.injectMembers(instance, injectionStack);
@@ -67,12 +67,12 @@ public class SimpleInjector implements InternalInjector {
 
     @Override
     public <T> T getInstance(Class<T> type) {
-        return getInstance(new Token<>(type));
+        return getInstance(TypeReference.of(type));
     }
 
     @Override
-    public <T> T getInstance(Token<T> token) {
-        return getInstance(Key.of(token));
+    public <T> T getInstance(TypeReference<T> typeReference) {
+        return getInstance(Key.of(typeReference));
     }
 
     @Override
@@ -89,7 +89,7 @@ public class SimpleInjector implements InternalInjector {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public <T> T getInstance(Key<T> key, boolean ignoreExplicitBindings, Stack<Member> injectionStack) {
         checkNotNull(key);
-        Token<T> type = key.getType();
+        TypeReference<T> type = key.getType();
 
         if (type.getRawType() == Injector.class) {
             return (T) this;
@@ -139,7 +139,7 @@ public class SimpleInjector implements InternalInjector {
 
         if (!binding.isProviderInjected()) {
             Provider<T> provider = binding.getProvider();
-            injectMembers(new Token<>(provider.getClass()), provider);
+            injectMembers(TypeReference.of(provider.getClass()), provider);
             binding.setProviderInjected(true);
             binder.setBinding(binding);
         }

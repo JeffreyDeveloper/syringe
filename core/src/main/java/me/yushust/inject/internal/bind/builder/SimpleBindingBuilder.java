@@ -4,7 +4,7 @@ import me.yushust.inject.Provider;
 import me.yushust.inject.bind.Binding;
 import me.yushust.inject.bind.BindingBuilder;
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 import me.yushust.inject.internal.*;
 import me.yushust.inject.internal.bind.InstanceBinding;
 import me.yushust.inject.internal.bind.LinkedBinding;
@@ -23,10 +23,10 @@ public class SimpleBindingBuilder<T> implements BindingBuilder.Qualified<T> {
 
     private final InternalBinder binder;
 
-    private Token<T> type;
+    private TypeReference<T> type;
     private Key<T> key;
 
-    public SimpleBindingBuilder(InternalBinder binder, Token<T> type) {
+    public SimpleBindingBuilder(InternalBinder binder, TypeReference<T> type) {
         this.binder = checkNotNull(binder);
         this.type = checkNotNull(type);
     }

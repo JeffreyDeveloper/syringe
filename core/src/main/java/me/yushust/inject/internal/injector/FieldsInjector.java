@@ -2,7 +2,7 @@ package me.yushust.inject.internal.injector;
 
 import me.yushust.inject.exception.ExceptionFactory;
 import me.yushust.inject.exception.UnsupportedInjectionException;
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 import me.yushust.inject.internal.InternalInjector;
 import me.yushust.inject.internal.MembersInjector;
 import me.yushust.inject.resolve.InjectableMember;
@@ -18,10 +18,10 @@ import static me.yushust.inject.internal.Preconditions.*;
 public class FieldsInjector implements MembersInjector {
 
     private final InternalInjector injector;
-    private final Token<?> declaringClass;
+    private final TypeReference<?> declaringClass;
     private final Set<InjectableMember> injections;
 
-    public FieldsInjector(InternalInjector injector, Token<?> declaringClass, Set<InjectableMember> injectableMembers) {
+    public FieldsInjector(InternalInjector injector, TypeReference<?> declaringClass, Set<InjectableMember> injectableMembers) {
         this.injector = checkNotNull(injector);
         this.declaringClass = checkNotNull(declaringClass);
         this.injections = checkNotNull(injectableMembers);

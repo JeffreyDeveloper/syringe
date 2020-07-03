@@ -1,7 +1,7 @@
 package me.yushust.inject.bind;
 
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 
 import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
@@ -9,7 +9,7 @@ public interface Binder {
 
     <T> BindingBuilder.Qualified<T> bind(Class<T> type);
 
-    <T> BindingBuilder.Qualified<T> bind(Token<T> token);
+    <T> BindingBuilder.Qualified<T> bind(TypeReference<T> typeReference);
 
     <T> BindingBuilder.Linkable<T> bind(Key<T> key);
 

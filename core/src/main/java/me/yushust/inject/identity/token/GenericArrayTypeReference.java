@@ -4,15 +4,15 @@ import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
-class GenericArrayToken implements GenericArrayType {
+class GenericArrayTypeReference implements GenericArrayType {
 
     private final Type componentType;
 
-    GenericArrayToken(GenericArrayType prototype) {
+    GenericArrayTypeReference(GenericArrayType prototype) {
         this(prototype.getGenericComponentType());
     }
 
-    GenericArrayToken(Type componentType) {
+    GenericArrayTypeReference(Type componentType) {
         this.componentType = Types.wrap(componentType);
     }
 

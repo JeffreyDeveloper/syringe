@@ -2,7 +2,7 @@ package me.yushust.inject.internal.injector;
 
 import me.yushust.inject.exception.ExceptionFactory;
 import me.yushust.inject.exception.UnsupportedInjectionException;
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 import me.yushust.inject.internal.InternalInjector;
 import me.yushust.inject.internal.MembersInjector;
 import me.yushust.inject.resolve.InjectableMember;
@@ -20,10 +20,10 @@ import static me.yushust.inject.internal.Preconditions.checkNotNull;
 public class MethodsInjector implements MembersInjector {
 
     private final InternalInjector injector;
-    private final Token<?> declaringClass;
+    private final TypeReference<?> declaringClass;
     private final Set<InjectableMember> injections;
 
-    public MethodsInjector(InternalInjector injector, Token<?> declaringClass, Set<InjectableMember> injections) {
+    public MethodsInjector(InternalInjector injector, TypeReference<?> declaringClass, Set<InjectableMember> injections) {
         this.injector = checkNotNull(injector);
         this.declaringClass = checkNotNull(declaringClass);
         this.injections = checkNotNull(injections);

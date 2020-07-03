@@ -2,7 +2,7 @@ package me.yushust.inject.resolve.resolver;
 
 import me.yushust.inject.Inject;
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 import me.yushust.inject.resolve.InjectableMember;
 import me.yushust.inject.resolve.OptionalInjectionChecker;
 import me.yushust.inject.resolve.ResolvableKey;
@@ -27,7 +27,7 @@ public class ReflectionInjectableMembersResolver implements InjectableMembersRes
     }
 
     @Override
-    public Set<InjectableMember> resolveInjectableFields(Token<?> type) {
+    public Set<InjectableMember> resolveInjectableFields(TypeReference<?> type) {
         checkNotNull(type);
 
         Set<InjectableMember> members = new HashSet<>();
@@ -49,7 +49,7 @@ public class ReflectionInjectableMembersResolver implements InjectableMembersRes
     }
 
     @Override
-    public Set<InjectableMember> resolveInjectableMethods(Token<?> type) {
+    public Set<InjectableMember> resolveInjectableMethods(TypeReference<?> type) {
         checkNotNull(type);
         Set<InjectableMember> members = new HashSet<>();
 
@@ -66,13 +66,13 @@ public class ReflectionInjectableMembersResolver implements InjectableMembersRes
     }
 
     @Override
-    public <T> InjectableMember transformConstructor(Token<T> declaringClass, Constructor<T> constructor) {
+    public <T> InjectableMember transformConstructor(TypeReference<T> declaringClass, Constructor<T> constructor) {
         checkNotNull(declaringClass);
         checkNotNull(constructor);
         return new InjectableMember(declaringClass, constructor, resolveKeys(declaringClass, constructor.getParameters()));
     }
 
-    private List<ResolvableKey<?>> resolveKeys(Token<?> declaringClass, Parameter[] parameters) {
+    private List<ResolvableKey<?>> resolveKeys(TypeReference<?> declaringClass, Parameter[] parameters) {
         List<ResolvableKey<?>> keys = new LinkedList<>();
 
         for (Parameter parameter : parameters) {

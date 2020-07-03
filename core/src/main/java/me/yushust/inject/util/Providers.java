@@ -2,7 +2,7 @@ package me.yushust.inject.util;
 
 import me.yushust.inject.Provider;
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -23,7 +23,7 @@ public final class Providers {
         ParameterizedType parameterizedType = (ParameterizedType) type;
         Type parameterType = parameterizedType.getActualTypeArguments()[0];
 
-        return Key.of(new Token<>(parameterType));
+        return Key.of(TypeReference.of(parameterType));
     }
 
 }

@@ -1,7 +1,7 @@
 package me.yushust.inject.resolve.resolver;
 
 import me.yushust.inject.Inject;
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 
 import java.lang.reflect.Constructor;
 
@@ -9,7 +9,7 @@ public class ReflectionInjectableConstructorResolver implements InjectableConstr
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> Constructor<T> findInjectableConstructor(Token<T> type) { // null is a valid return valu
+    public <T> Constructor<T> findInjectableConstructor(TypeReference<T> type) { // null is a valid return valu
 
         Constructor<?> injectableConstructor = null;
 

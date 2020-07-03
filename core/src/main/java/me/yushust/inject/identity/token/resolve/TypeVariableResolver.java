@@ -1,7 +1,7 @@
 package me.yushust.inject.identity.token.resolve;
 
 import me.yushust.inject.identity.token.ContextualTypes;
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 
 import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.ParameterizedType;
@@ -13,7 +13,7 @@ import static me.yushust.inject.internal.Preconditions.checkArgument;
 public class TypeVariableResolver implements TypeResolver {
 
     @Override
-    public Type resolveType(Token<?> context, Type toResolve) {
+    public Type resolveType(TypeReference<?> context, Type toResolve) {
 
         checkArgument(toResolve instanceof TypeVariable, "Type isn't an instance of TypeVariable!");
 

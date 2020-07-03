@@ -1,6 +1,6 @@
 package me.yushust.inject.resolve;
 
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 
 import java.lang.reflect.Member;
 import java.util.List;
@@ -11,17 +11,17 @@ import static me.yushust.inject.internal.Preconditions.checkNotNull;
 
 public class InjectableMember {
 
-    private final Token<?> declaringClass;
+    private final TypeReference<?> declaringClass;
     private final Member member;
     private final List<ResolvableKey<?>> keys;
 
-    public InjectableMember(Token<?> declaringClass, Member member, List<ResolvableKey<?>> keys) {
+    public InjectableMember(TypeReference<?> declaringClass, Member member, List<ResolvableKey<?>> keys) {
         this.declaringClass = checkNotNull(declaringClass);
         this.member = checkNotNull(member);
         this.keys = unmodifiableList(keys);
     }
 
-    public Token<?> getDeclaringClass() {
+    public TypeReference<?> getDeclaringClass() {
         return declaringClass;
     }
 

@@ -4,17 +4,17 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
-class ParameterizedToken implements ParameterizedType {
+class ParameterizedTypeReference implements ParameterizedType {
 
     private final Type ownerType;
     private final Type rawType;
     private final Type[] typeArguments;
 
-    ParameterizedToken(ParameterizedType prototype) {
+    ParameterizedTypeReference(ParameterizedType prototype) {
         this(prototype.getOwnerType(), prototype.getRawType(), prototype.getActualTypeArguments());
     }
 
-    ParameterizedToken(Type ownerType, Type rawType, Type... typeArguments) {
+    ParameterizedTypeReference(Type ownerType, Type rawType, Type... typeArguments) {
 
         this.ownerType = ownerType == null ? null : Types.wrap(ownerType);
         this.rawType = Types.wrap(rawType);

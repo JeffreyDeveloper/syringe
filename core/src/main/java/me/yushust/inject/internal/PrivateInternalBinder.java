@@ -3,7 +3,7 @@ package me.yushust.inject.internal;
 import me.yushust.inject.bind.Binding;
 import me.yushust.inject.exception.ExceptionFactory;
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 import me.yushust.inject.bind.PrivateBinder;
 
 import static me.yushust.inject.internal.Preconditions.checkNotNull;
@@ -18,11 +18,11 @@ public class PrivateInternalBinder extends SimpleBinder implements PrivateBinder
 
     @Override
     public <T> void expose(Class<T> key) {
-        expose(new Token<>(key));
+        expose(TypeReference.of(key));
     }
 
     @Override
-    public <T> void expose(Token<T> key) {
+    public <T> void expose(TypeReference<T> key) {
         expose(Key.of(key));
     }
 

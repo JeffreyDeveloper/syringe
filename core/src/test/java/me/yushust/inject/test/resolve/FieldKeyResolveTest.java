@@ -1,7 +1,7 @@
 package me.yushust.inject.test.resolve;
 
 import me.yushust.inject.identity.Key;
-import me.yushust.inject.identity.token.Token;
+import me.yushust.inject.identity.token.TypeReference;
 import me.yushust.inject.resolve.AnnotationTypeHandler;
 import me.yushust.inject.resolve.resolver.MemberKeyResolver;
 import me.yushust.inject.resolve.resolver.ReflectionMemberKeyResolver;
@@ -19,19 +19,19 @@ public class FieldKeyResolveTest {
     public void resolveFieldKey() {
 
         MemberKeyResolver keyResolver = new ReflectionMemberKeyResolver(new AnnotationTypeHandler());
-        Token<Foo<String>> token = new Token<Foo<String>>() {};
+        TypeReference<Foo<String>> typeReference = new TypeReference<Foo<String>>() {};
 
         Key<?>[] expectedKeys = {
                 new Key<String>() {},
                 new Key<List<String>>() {},
                 new Key<Map<String, String>>() {}
         };
-        Field[] fields = token.getRawType().getDeclaredFields();
+        Field[] fields = typeReference.getRawType().getDeclaredFields();
 
         for (int i = 0; i < fields.length; i ++) {
             Key<?> expectedKey = expectedKeys[i];
             Field field = fields[i];
-            Key<?> key = keyResolver.keyOf(token, field);
+            Key<?> key = keyResolver.keyOf(typeReference, field);
 
             assertEquals(expectedKey, key);
         }

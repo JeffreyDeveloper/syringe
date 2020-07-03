@@ -78,7 +78,7 @@ public final class ContextualTypes {
 
     }
 
-    public static Type resolveContextually(Token<?> context, Type type) {
+    public static Type resolveContextually(TypeReference<?> context, Type type) {
 
         checkNotNull(context);
 
