@@ -6,6 +6,7 @@ import me.yushust.inject.identity.type.TypeReference;
 import me.yushust.inject.resolve.InjectableMember;
 import me.yushust.inject.resolve.OptionalInjectionChecker;
 import me.yushust.inject.resolve.ResolvableKey;
+import me.yushust.inject.util.Recursion;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -32,7 +33,7 @@ public class ReflectionInjectableMembersResolver implements InjectableMembersRes
 
         Set<InjectableMember> members = new HashSet<>();
 
-        for (Field field : type.getRawType().getDeclaredFields()) {
+        for (Field field : Recursion.getFieldsRecursively(type.getRawType())) {
             if (field.getAnnotation(Inject.class) == null
                 && field.getAnnotation(javax.inject.Inject.class) == null) {
                 continue;
@@ -53,7 +54,7 @@ public class ReflectionInjectableMembersResolver implements InjectableMembersRes
         checkNotNull(type);
         Set<InjectableMember> members = new HashSet<>();
 
-        for (Method method : type.getRawType().getDeclaredMethods()) {
+        for (Method method : Recursion.getMethodsRecursively(type.getRawType())) {
             if (method.getAnnotation(Inject.class) == null
                     && method.getAnnotation(javax.inject.Inject.class) == null) {
                 continue;
