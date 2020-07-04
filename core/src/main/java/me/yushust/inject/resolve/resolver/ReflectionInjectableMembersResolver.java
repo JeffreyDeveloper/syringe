@@ -6,7 +6,6 @@ import me.yushust.inject.identity.type.TypeReference;
 import me.yushust.inject.resolve.InjectableMember;
 import me.yushust.inject.resolve.OptionalInjectionChecker;
 import me.yushust.inject.resolve.ResolvableKey;
-import me.yushust.inject.util.Recursion;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -33,17 +32,21 @@ public class ReflectionInjectableMembersResolver implements InjectableMembersRes
 
         Set<InjectableMember> members = new HashSet<>();
 
-        for (Field field : Recursion.getFieldsRecursively(type.getRawType())) {
-            if (field.getAnnotation(Inject.class) == null
-                && field.getAnnotation(javax.inject.Inject.class) == null) {
-                continue;
+        Class<?> current = type.getRawType();
+        while (current != Object.class) {
+            for (Field field : current.getDeclaredFields()) {
+                if (field.getAnnotation(Inject.class) == null
+                        && field.getAnnotation(javax.inject.Inject.class) == null) {
+                    continue;
+                }
+                Key<?> key = memberKeyResolver.keyOf(type, field);
+                boolean optional = optionalInjectionChecker.isFieldOptional(field);
+                field.setAccessible(true);
+                members.add(new InjectableMember(type, field, Collections.singletonList(
+                        new ResolvableKey<>(key, optional)
+                )));
             }
-            Key<?> key = memberKeyResolver.keyOf(type, field);
-            boolean optional = optionalInjectionChecker.isFieldOptional(field);
-            field.setAccessible(true);
-            members.add(new InjectableMember(type, field, Collections.singletonList(
-                    new ResolvableKey<>(key, optional)
-            )));
+            current = current.getSuperclass();
         }
 
         return members;
@@ -54,13 +57,18 @@ public class ReflectionInjectableMembersResolver implements InjectableMembersRes
         checkNotNull(type);
         Set<InjectableMember> members = new HashSet<>();
 
-        for (Method method : Recursion.getMethodsRecursively(type.getRawType())) {
-            if (method.getAnnotation(Inject.class) == null
-                    && method.getAnnotation(javax.inject.Inject.class) == null) {
-                continue;
+        Class<?> current = type.getRawType();
+
+        while (current != Object.class) {
+            for (Method method : current.getDeclaredMethods()) {
+                if (method.getAnnotation(Inject.class) == null
+                        && method.getAnnotation(javax.inject.Inject.class) == null) {
+                    continue;
+                }
+                method.setAccessible(true);
+                members.add(new InjectableMember(type, method, resolveKeys(type, method.getParameters())));
             }
-            method.setAccessible(true);
-            members.add(new InjectableMember(type, method, resolveKeys(type, method.getParameters())));
+            current = current.getSuperclass();
         }
 
         return members;
