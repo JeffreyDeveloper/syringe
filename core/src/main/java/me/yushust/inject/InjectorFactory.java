@@ -88,9 +88,15 @@ public final class InjectorFactory {
         AnnotationTypeHandler annotationTypeHandler = new AnnotationTypeHandler();
         InjectableConstructorResolver constructorResolver = interceptor
                 .interceptConstructorResolver(new ReflectionInjectableConstructorResolver());
+
         MemberKeyResolver memberKeyResolver = new ReflectionMemberKeyResolver(annotationTypeHandler);
+
         InjectableMembersResolver injectableMembersResolver = interceptor.interceptMembersResolver(
-                        new ReflectionInjectableMembersResolver(options.getOptionalInjectionChecker(), memberKeyResolver)
+                        new ReflectionInjectableMembersResolver(
+                                options.getOptionalInjectionChecker(),
+                                memberKeyResolver,
+                                options.requiresResolveAnnotation()
+                        )
         );
 
         return new SimpleInjector(binder, constructorResolver, injectableMembersResolver, interceptor);

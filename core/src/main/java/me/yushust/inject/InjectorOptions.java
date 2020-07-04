@@ -10,10 +10,13 @@ public class InjectorOptions {
 
     private final OptionalInjectionChecker optionalInjectionChecker;
     private final ProcessorInterceptor processorInterceptor;
+    private final boolean requireResolveAnnotation;
 
-    private InjectorOptions(OptionalInjectionChecker optionalInjectionChecker, ProcessorInterceptor processorInterceptor) {
+    private InjectorOptions(OptionalInjectionChecker optionalInjectionChecker, ProcessorInterceptor processorInterceptor,
+                            boolean requireResolveAnnotation) {
         this.optionalInjectionChecker = optionalInjectionChecker;
         this.processorInterceptor = processorInterceptor;
+        this.requireResolveAnnotation = requireResolveAnnotation;
     }
 
     public OptionalInjectionChecker getOptionalInjectionChecker() {
@@ -24,6 +27,10 @@ public class InjectorOptions {
         return processorInterceptor;
     }
 
+    public boolean requiresResolveAnnotation() {
+        return requireResolveAnnotation;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -32,6 +39,7 @@ public class InjectorOptions {
 
         private OptionalInjectionChecker optionalInjectionChecker = new AnnotationOptionalInjectionChecker();
         private ProcessorInterceptor processorInterceptor = ProcessorInterceptor.dummy();
+        private boolean requireResolveAnnotation = false;
 
         public Builder optionalInjectionChecker(OptionalInjectionChecker optionalInjectionChecker) {
             checkNotNull(optionalInjectionChecker);
@@ -45,8 +53,13 @@ public class InjectorOptions {
             return this;
         }
 
+        public Builder requireResolveAnnotation() {
+            this.requireResolveAnnotation = true;
+            return this;
+        }
+
         public InjectorOptions build() {
-            return new InjectorOptions(optionalInjectionChecker, processorInterceptor);
+            return new InjectorOptions(optionalInjectionChecker, processorInterceptor, requireResolveAnnotation);
         }
 
     }

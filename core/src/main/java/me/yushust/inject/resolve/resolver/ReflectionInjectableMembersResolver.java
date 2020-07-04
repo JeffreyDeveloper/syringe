@@ -1,6 +1,7 @@
 package me.yushust.inject.resolve.resolver;
 
 import me.yushust.inject.Inject;
+import me.yushust.inject.Resolve;
 import me.yushust.inject.identity.Key;
 import me.yushust.inject.identity.type.TypeReference;
 import me.yushust.inject.resolve.InjectableMember;
@@ -19,11 +20,14 @@ public class ReflectionInjectableMembersResolver implements InjectableMembersRes
 
     private final OptionalInjectionChecker optionalInjectionChecker;
     private final MemberKeyResolver memberKeyResolver;
+    private final boolean requireResolveAnnotation;
 
     public ReflectionInjectableMembersResolver(OptionalInjectionChecker optionalInjectionChecker,
-                                               MemberKeyResolver memberKeyResolver) {
+                                               MemberKeyResolver memberKeyResolver,
+                                               boolean requireResolveAnnotation) {
         this.optionalInjectionChecker = checkNotNull(optionalInjectionChecker);
         this.memberKeyResolver = checkNotNull(memberKeyResolver);
+        this.requireResolveAnnotation = requireResolveAnnotation;
     }
 
     @Override
@@ -33,7 +37,12 @@ public class ReflectionInjectableMembersResolver implements InjectableMembersRes
         Set<InjectableMember> members = new HashSet<>();
 
         Class<?> current = type.getRawType();
-        while (current != Object.class) {
+        Resolve resolveAnnotation = null;
+
+        while (
+                (!requireResolveAnnotation && current != Object.class) ||
+                (resolveAnnotation = current.getAnnotation(Resolve.class)) != null
+        ) {
             for (Field field : current.getDeclaredFields()) {
                 if (field.getAnnotation(Inject.class) == null
                         && field.getAnnotation(javax.inject.Inject.class) == null) {
@@ -45,6 +54,9 @@ public class ReflectionInjectableMembersResolver implements InjectableMembersRes
                 members.add(new InjectableMember(type, field, Collections.singletonList(
                         new ResolvableKey<>(key, optional)
                 )));
+            }
+            if (resolveAnnotation != null && !resolveAnnotation.checkParentClasses()) {
+                break;
             }
             current = current.getSuperclass();
         }
