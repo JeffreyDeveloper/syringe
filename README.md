@@ -21,7 +21,7 @@ injector.injectMembers(foo);
 
 ### Create a module
 Creating a module is as simple as creating a class that extends `Module` and override `configure` method
-The way to configure links is very similar to the way to configure bindings in  [Guice](https://github.com/google/guice)
+The way to configure bindings is very similar to the way to configure bindings in [Guice](https://github.com/google/guice)
 ```java
 import me.yushust.inject.bind.Module;
 import me.yushust.inject.bind.Binder;
@@ -43,16 +43,16 @@ public void configure(Binder binder) {
     binder.bind(Foo.class).to(Bar.class);
 }
 ```
-We can also make generic links using `Token`
+We can also make generic bindings using `TypeReference`
 ```java
 @Override
 public void configure(Binder binder) {
     // The {} are important!
-    binder.bind(new Token<List<String>>() {}).toInstance(new ArrayList<>());
+    binder.bind(new TypeReference<List<String>>() {}).toInstance(new ArrayList<>());
     // The links to instance are Singleton by default
 }
 ```
-It is also possible to make links with annotations (called Qualifiers)
+It is also possible to make bindings with annotations (called Qualifiers)
 ```java
 @Override
 public void configure(Binder binder) {
@@ -94,6 +94,6 @@ mvn clean install
 <dependency>
     <groupId>me.yushust.inject</groupId>
     <artifactId>syringe-core</artifactId>
-    <version>0.2.2-BETA</version>
+    <version>0.3.0</version>
 </dependency>
 ```

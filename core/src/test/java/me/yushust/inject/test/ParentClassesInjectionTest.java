@@ -23,7 +23,7 @@ public class ParentClassesInjectionTest {
         assertNotNull(bar.something);
 
         BarButDoesntCheckParentClasses bar2 = injector.getInstance(BarButDoesntCheckParentClasses.class);
-        
+
         assertNull(bar2.something);
         assertNotNull(bar2.something2);
 
