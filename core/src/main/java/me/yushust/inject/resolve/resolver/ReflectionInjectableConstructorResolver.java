@@ -31,6 +31,7 @@ public class ReflectionInjectableConstructorResolver implements InjectableConstr
             }
 
             injectableConstructor = constructor;
+            break;
 
         }
 
