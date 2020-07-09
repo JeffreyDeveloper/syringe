@@ -77,9 +77,6 @@ public @interface FooAnnotation {
 }
 ```
 
-## Notes
-Syringe does not detect cycle dependencies. So, you should avoid making confusing links.
-
 ### Download
 ```yml
 # Clone the repository
