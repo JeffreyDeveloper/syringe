@@ -4,6 +4,7 @@ import me.yushust.inject.Injector;
 import me.yushust.inject.Provider;
 import me.yushust.inject.identity.type.TypeReference;
 import me.yushust.inject.internal.injector.ConstructorInjector;
+import me.yushust.inject.process.BindingAnnotationProcessor;
 import me.yushust.inject.process.ProcessorInterceptor;
 import me.yushust.inject.bind.Binding;
 import me.yushust.inject.exception.UnsupportedInjectionException;
@@ -23,20 +24,24 @@ public class SimpleInjector implements InternalInjector {
     private final InternalBinder binder;
     private final InjectableConstructorResolver injectableConstructorResolver;
     private final MembersInjectorFactory membersInjectorFactory;
+    private final BindingAnnotationProcessor bindingAnnotationProcessor;
 
     public SimpleInjector(InternalBinder binder, InjectableConstructorResolver injectableConstructorResolver,
-                          InjectableMembersResolver membersResolver, ProcessorInterceptor processorInterceptor) {
+                          InjectableMembersResolver membersResolver, ProcessorInterceptor processorInterceptor,
+                          BindingAnnotationProcessor bindingAnnotationProcessor) {
         this.binder = checkNotNull(binder);
         this.injectableConstructorResolver = checkNotNull(injectableConstructorResolver);
         this.membersInjectorFactory = processorInterceptor.interceptMembersInjectorFactory(new SimpleMembersInjectorFactory(
                 injectableConstructorResolver, membersResolver, this
         ));
+        this.bindingAnnotationProcessor = bindingAnnotationProcessor;
     }
 
     private SimpleInjector(InternalBinder binder, SimpleInjector prototype) {
         this.binder = binder;
         this.injectableConstructorResolver = prototype.injectableConstructorResolver;
         this.membersInjectorFactory = prototype.membersInjectorFactory.usingInjector(this);
+        this.bindingAnnotationProcessor = prototype.bindingAnnotationProcessor;
     }
 
     @Override
@@ -105,6 +110,13 @@ public class SimpleInjector implements InternalInjector {
             Provider<T> provider = getProvider(key);
             if (provider != null) {
                 return provider.get();
+            }
+
+            if (type.getRawType() == type.getType()) { // it's not a generic type
+                boolean bound = bindingAnnotationProcessor.bind(binder, type.getRawType());
+                if (bound) {
+                    return (T) getInstance(Key.of(type.getRawType()), false, injectionStack);
+                }
             }
         }
 

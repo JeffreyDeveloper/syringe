@@ -2,6 +2,7 @@ package me.yushust.inject;
 
 import me.yushust.inject.internal.InternalBinder;
 import me.yushust.inject.internal.SimpleBinder;
+import me.yushust.inject.process.BindingAnnotationProcessor;
 import me.yushust.inject.process.ProcessorInterceptor;
 import me.yushust.inject.bind.Module;
 import me.yushust.inject.internal.SimpleInjector;
@@ -86,6 +87,7 @@ public final class InjectorFactory {
         ProcessorInterceptor interceptor = options.getProcessorInterceptor();
 
         AnnotationTypeHandler annotationTypeHandler = new AnnotationTypeHandler();
+        BindingAnnotationProcessor bindingAnnotationProcessor = options.getBindingAnnotationProcessor();
         MemberKeyResolver memberKeyResolver = new ReflectionMemberKeyResolver(annotationTypeHandler);
         InjectableConstructorResolver constructorResolver = new ReflectionInjectableConstructorResolver();
         constructorResolver = interceptor.interceptConstructorResolver(constructorResolver);
@@ -95,7 +97,9 @@ public final class InjectorFactory {
         );
         injectableMembersResolver = interceptor.interceptMembersResolver(injectableMembersResolver);
 
-        return new SimpleInjector(binder, constructorResolver, injectableMembersResolver, interceptor);
+        return new SimpleInjector(
+                binder, constructorResolver, injectableMembersResolver, interceptor, bindingAnnotationProcessor
+        );
     }
 
 }
