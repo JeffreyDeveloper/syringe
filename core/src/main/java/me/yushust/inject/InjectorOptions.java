@@ -68,7 +68,7 @@ public class InjectorOptions {
             return this;
         }
 
-        public Builder enableBindingAnnotations() {
+        public Builder enableTypeBindingAnnotations() {
             bindingAnnotationProcessor = new DefaultBindingAnnotationProcessor();
             return this;
         }

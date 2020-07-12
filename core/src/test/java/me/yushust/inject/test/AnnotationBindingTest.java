@@ -16,7 +16,7 @@ public class AnnotationBindingTest {
 
         Injector injector = InjectorFactory.create(
                 InjectorOptions.builder()
-                        .enableBindingAnnotations() // enabled the processing of ImplementedBy and ProvidedBy annotations
+                        .enableTypeBindingAnnotations() // enabled the processing of ImplementedBy and ProvidedBy annotations
                         .build()
         );
 
