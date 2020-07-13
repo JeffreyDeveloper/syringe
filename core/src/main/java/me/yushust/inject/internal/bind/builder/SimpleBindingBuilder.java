@@ -12,6 +12,7 @@ import me.yushust.inject.internal.bind.ProviderKeyBinding;
 import me.yushust.inject.internal.bind.SimpleBinding;
 import me.yushust.inject.name.Names;
 import me.yushust.inject.scope.Scope;
+import me.yushust.inject.scope.Scopes;
 
 import java.lang.annotation.Annotation;
 
@@ -102,6 +103,11 @@ public class SimpleBindingBuilder<T> implements BindingBuilder.Qualified<T> {
         Provider<T> provider = binding.getProvider();
         provider = scope.wrap(key, provider);
         binder.setBinding(new SimpleBinding<>(key, provider));
+    }
+
+    @Override
+    public void singleton() {
+        scope(Scopes.SINGLETON); // just a method alias for "scope(Scopes.SINGLETON)"
     }
 
     private void createKeyIfAbsent() {

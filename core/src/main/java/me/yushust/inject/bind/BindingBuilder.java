@@ -10,6 +10,8 @@ public interface BindingBuilder<T> {
 
     void scope(Scope scope);
 
+    void singleton();
+
     interface Linkable<T> extends BindingBuilder<T> {
 
         BindingBuilder<T> to(Class<? extends T> target);
