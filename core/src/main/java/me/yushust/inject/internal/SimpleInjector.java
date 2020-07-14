@@ -108,15 +108,16 @@ public class SimpleInjector implements InternalInjector {
 
         if (!ignoreExplicitBindings) {
             Provider<T> provider = getProvider(key);
-            if (provider != null) {
-                return provider.get();
-            }
 
             if (type.getRawType() == type.getType()) { // it's not a generic type
                 boolean bound = bindingAnnotationProcessor.bind(binder, type.getRawType());
                 if (bound) {
                     return (T) getInstance(Key.of(type.getRawType()), false, injectionStack);
                 }
+            }
+
+            if (provider != null) {
+                return provider.get();
             }
         }
 

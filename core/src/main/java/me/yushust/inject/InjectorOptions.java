@@ -2,7 +2,7 @@ package me.yushust.inject;
 
 import me.yushust.inject.process.BindingAnnotationProcessor;
 import me.yushust.inject.process.DefaultBindingAnnotationProcessor;
-import me.yushust.inject.process.DummyBindingAnnotationProcessor;
+import me.yushust.inject.process.DummyAnnotationProcessor;
 import me.yushust.inject.process.ProcessorInterceptor;
 import me.yushust.inject.resolve.AnnotationOptionalInjectionChecker;
 import me.yushust.inject.resolve.OptionalInjectionChecker;
@@ -48,7 +48,7 @@ public class InjectorOptions {
 
         private OptionalInjectionChecker optionalInjectionChecker = new AnnotationOptionalInjectionChecker();
         private ProcessorInterceptor processorInterceptor = ProcessorInterceptor.dummy();
-        private BindingAnnotationProcessor bindingAnnotationProcessor = DummyBindingAnnotationProcessor.INSTANCE;
+        private BindingAnnotationProcessor bindingAnnotationProcessor = DummyAnnotationProcessor.INSTANCE;
         private boolean requireResolveAnnotation = false;
 
         public Builder optionalInjectionChecker(OptionalInjectionChecker optionalInjectionChecker) {
