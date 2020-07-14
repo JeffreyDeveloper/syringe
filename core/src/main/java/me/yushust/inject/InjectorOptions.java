@@ -1,9 +1,6 @@
 package me.yushust.inject;
 
-import me.yushust.inject.process.BindingAnnotationProcessor;
-import me.yushust.inject.process.DefaultBindingAnnotationProcessor;
-import me.yushust.inject.process.DummyAnnotationProcessor;
-import me.yushust.inject.process.ProcessorInterceptor;
+import me.yushust.inject.process.*;
 import me.yushust.inject.resolve.AnnotationOptionalInjectionChecker;
 import me.yushust.inject.resolve.OptionalInjectionChecker;
 
@@ -14,13 +11,16 @@ public class InjectorOptions {
     private final OptionalInjectionChecker optionalInjectionChecker;
     private final ProcessorInterceptor processorInterceptor;
     private final BindingAnnotationProcessor bindingAnnotationProcessor;
+    private final ScopeAnnotationProcessor scopeAnnotationProcessor;
     private final boolean requireResolveAnnotation;
 
     private InjectorOptions(OptionalInjectionChecker optionalInjectionChecker, ProcessorInterceptor processorInterceptor,
-                            BindingAnnotationProcessor bindingAnnotationProcessor, boolean requireResolveAnnotation) {
+                            BindingAnnotationProcessor bindingProcessor, ScopeAnnotationProcessor scopeProcessor,
+                            boolean requireResolveAnnotation) {
         this.optionalInjectionChecker = optionalInjectionChecker;
         this.processorInterceptor = processorInterceptor;
-        this.bindingAnnotationProcessor = bindingAnnotationProcessor;
+        this.bindingAnnotationProcessor = bindingProcessor;
+        this.scopeAnnotationProcessor = scopeProcessor;
         this.requireResolveAnnotation = requireResolveAnnotation;
     }
 
@@ -36,6 +36,10 @@ public class InjectorOptions {
         return bindingAnnotationProcessor;
     }
 
+    public ScopeAnnotationProcessor getScopeAnnotationProcessor() {
+        return scopeAnnotationProcessor;
+    }
+
     public boolean requiresResolveAnnotation() {
         return requireResolveAnnotation;
     }
@@ -49,6 +53,7 @@ public class InjectorOptions {
         private OptionalInjectionChecker optionalInjectionChecker = new AnnotationOptionalInjectionChecker();
         private ProcessorInterceptor processorInterceptor = ProcessorInterceptor.dummy();
         private BindingAnnotationProcessor bindingAnnotationProcessor = DummyAnnotationProcessor.INSTANCE;
+        private ScopeAnnotationProcessor scopeAnnotationProcessor = DummyAnnotationProcessor.INSTANCE;
         private boolean requireResolveAnnotation = false;
 
         public Builder optionalInjectionChecker(OptionalInjectionChecker optionalInjectionChecker) {
@@ -73,9 +78,15 @@ public class InjectorOptions {
             return this;
         }
 
+        public Builder enableTypeScopingAnnotations() {
+            scopeAnnotationProcessor = new DefaultScopeAnnotationProcessor();
+            return this;
+        }
+
         public InjectorOptions build() {
             return new InjectorOptions(
-                    optionalInjectionChecker, processorInterceptor, bindingAnnotationProcessor, requireResolveAnnotation
+                    optionalInjectionChecker, processorInterceptor, bindingAnnotationProcessor,
+                    scopeAnnotationProcessor, requireResolveAnnotation
             );
         }
 
