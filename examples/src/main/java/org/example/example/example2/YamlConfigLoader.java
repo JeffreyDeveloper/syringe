@@ -1,6 +1,6 @@
 package org.example.example.example2;
 
-import me.yushust.inject.Inject;
+import team.unnamed.inject.Inject;
 
 import java.io.File;
 import java.util.concurrent.Executor;

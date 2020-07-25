@@ -1,8 +1,8 @@
 package org.example.example.example1;
 
-import me.yushust.inject.Inject;
-import me.yushust.inject.Injector;
-import me.yushust.inject.InjectorFactory;
+import team.unnamed.inject.Inject;
+import team.unnamed.inject.Injector;
+import team.unnamed.inject.InjectorFactory;
 
 public class Main {
 

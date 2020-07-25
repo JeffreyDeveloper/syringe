@@ -1,7 +1,7 @@
 package org.example.example.example1;
 
-import me.yushust.inject.bind.Binder;
-import me.yushust.inject.bind.Module;
+import team.unnamed.inject.bind.Binder;
+import team.unnamed.inject.bind.Module;
 
 public class MyModule implements Module {
 

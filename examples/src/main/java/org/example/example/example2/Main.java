@@ -1,8 +1,8 @@
 package org.example.example.example2;
 
-import me.yushust.inject.Inject;
-import me.yushust.inject.Injector;
-import me.yushust.inject.InjectorFactory;
+import team.unnamed.inject.Inject;
+import team.unnamed.inject.Injector;
+import team.unnamed.inject.InjectorFactory;
 
 import java.io.File;
 import java.util.concurrent.Executor;

@@ -1,6 +1,4 @@
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/7763e3b2712d4201b28e2b8034a7fd7d)](https://www.codacy.com/manual/iYushu/syringe?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=yusshu/syringe&amp;utm_campaign=Badge_Grade)
-
-# Syringe Dependency Injection Framework (Moved to [Unnamed Team Organization](https://github.com/UnnamedWorks/syringe))
+# Syringe Dependency Injection Framework
 A fast and (very) lightweight Dependency Injection Framework for Java
 
 ## How to use
@@ -24,8 +22,8 @@ injector.injectMembers(foo);
 Creating a module is as simple as creating a class that extends `Module` and override `configure` method
 The way to configure bindings is very similar to the way to configure bindings in [Guice](https://github.com/google/guice)
 ```java
-import me.yushust.inject.bind.Module;
-import me.yushust.inject.bind.Binder;
+import team.unnamed.inject.bind.Module;
+import team.unnamed.inject.bind.Binder;
 
 public class MySimpleModule implements Module {
 
@@ -78,19 +76,17 @@ public @interface FooAnnotation {
 }
 ```
 
-### Download
-```yml
-# Clone the repository
-git clone https://github.com/yusshu/syringe
-# Move into the folder
-cd syringe
-# Install syringe using Maven
-mvn clean install 
+### Maven repository
+```xml
+<repository>
+    <id>unnamed-releases</id>
+    <url>https://repo.unnamed.team/repository/unnamed-releases/</url>
+</repository>
 ```
 ### Maven dependency
 ```xml
 <dependency>
-    <groupId>me.yushust.inject</groupId>
+    <groupId>team.unnamed.inject</groupId>
     <artifactId>syringe-core</artifactId>
     <version>0.3.0</version>
 </dependency>
