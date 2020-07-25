@@ -1,5 +1,6 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/7763e3b2712d4201b28e2b8034a7fd7d)](https://www.codacy.com/manual/iYushu/syringe?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=yusshu/syringe&amp;utm_campaign=Badge_Grade)
-# Syringe Dependency Injection Framework
+
+# Syringe Dependency Injection Framework (Moved to [Unnamed Team Organization](https://github.com/UnnamedWorks/syringe))
 A fast and (very) lightweight Dependency Injection Framework for Java
 
 ## How to use
