@@ -8,7 +8,6 @@ import team.unnamed.inject.bind.Module;
 import team.unnamed.inject.internal.SimpleInjector;
 import team.unnamed.inject.process.ScopeAnnotationProcessor;
 import team.unnamed.inject.resolve.AnnotationTypeHandler;
-import me.yushust.inject.resolve.resolver.*;
 import team.unnamed.inject.resolve.resolver.*;
 
 import java.util.Arrays;

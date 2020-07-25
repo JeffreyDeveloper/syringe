@@ -1,6 +1,5 @@
 package team.unnamed.inject.identity.type;
 
-import me.yushust.inject.identity.type.resolve.*;
 import team.unnamed.inject.identity.type.resolve.*;
 
 import java.lang.reflect.Type;

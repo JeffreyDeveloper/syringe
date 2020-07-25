@@ -5,7 +5,6 @@ import team.unnamed.inject.bind.Binding;
 import team.unnamed.inject.bind.BindingBuilder;
 import team.unnamed.inject.identity.Key;
 import team.unnamed.inject.identity.type.TypeReference;
-import me.yushust.inject.internal.*;
 import team.unnamed.inject.internal.InternalBinder;
 import team.unnamed.inject.internal.bind.InstanceBinding;
 import team.unnamed.inject.internal.bind.LinkedBinding;

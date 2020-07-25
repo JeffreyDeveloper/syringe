@@ -1,6 +1,5 @@
 package team.unnamed.inject;
 
-import me.yushust.inject.process.*;
 import team.unnamed.inject.process.*;
 import team.unnamed.inject.resolve.AnnotationOptionalInjectionChecker;
 import team.unnamed.inject.resolve.OptionalInjectionChecker;

@@ -1,6 +1,5 @@
 package team.unnamed.inject.test;
 
-import me.yushust.inject.*;
 import org.junit.jupiter.api.Test;
 import team.unnamed.inject.*;
 
